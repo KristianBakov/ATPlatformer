@@ -8,7 +8,7 @@ GraphicsClass::GraphicsClass()
 {
 	m_Direct3D = 0;
 	m_Camera = 0;
-	for (int i = 0; i < 2; i++)
+	for (int i = 0; i < 4; i++)
 	{
 		m_Model[i] = 0;
 	}
@@ -56,9 +56,9 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 	}
 
 	// Set the initial position of the camera.
-	m_Camera->SetPosition(0.0f, 0.0f, -15.0f);
+	m_Camera->SetPosition(cameraXpos, cameraYpos, cameraZpos);
 
-	for (int i = 0; i < 2; i++)
+	for (int i = 0; i < 4; i++)
 	{
 		// Create the model object.
 		m_Model[i] = new ModelClass;
@@ -147,7 +147,7 @@ void GraphicsClass::Shutdown()
 	//}
 
 	// Release the model object.
-	for (int i = 0; i < 2; i++)
+	for (int i = 0; i < 4; i++)
 	{
 		if (m_Model[i])
 		{
@@ -188,6 +188,33 @@ bool GraphicsClass::Frame()
 		rotation -= 360.0f;
 	}
 
+	if (GetKeyState('W') & 0x8000)
+	{
+		cameraZpos++;
+	}
+	if (GetKeyState('A') & 0x8000)
+	{
+		cameraXpos--;
+	}
+	if (GetKeyState('D') & 0x8000)
+	{
+		cameraXpos++;
+	}
+	if (GetKeyState('S') & 0x8000)
+	{
+		cameraZpos--;
+	}
+	if (GetKeyState('R') & 0x8000)
+	{
+		cameraYpos++;
+	}
+	if (GetKeyState('F') & 0x8000)
+	{
+		cameraYpos--;
+	}
+
+	m_Camera->SetPosition(cameraXpos, cameraYpos, cameraZpos);
+
 	// Render the graphics scene.
 	result = Render(rotation);
 	if (!result)
@@ -220,7 +247,7 @@ bool GraphicsClass::Render(float rotation)
 	//worldMatrix = XMMatrixRotationY(rotation);
 
 	// Put the model vertex and index buffers on the graphics pipeline to prepare them for drawing.
-	for (int i = 0; i < 2; i++)
+	for (int i = 0; i < 4; i++)
 	{
 		m_Model[i]->Render(m_Direct3D->GetDeviceContext());
 		worldMatrix = XMMatrixTranslation(0.0f, 0.0f, 5.0f * i) * XMMatrixRotationY(rotation);

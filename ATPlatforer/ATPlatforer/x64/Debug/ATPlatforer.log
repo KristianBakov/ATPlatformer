@@ -1,15 +1,2 @@
-﻿  cameraclass.cpp
-  colorshaderclass.cpp
-  d3dclass.cpp
-  graphicsclass.cpp
-  inputclass.cpp
-  lightclass.cpp
-  lightshaderclass.cpp
-  main.cpp
-  modelclass.cpp
-  systemclass.cpp
-  Textureclass.cpp
-  Textureshaderclass.cpp
-  Generating Code...
-D:\ATTaskNew\ATPlatforer\src\lightshaderclass.cpp(305,42): warning C4244: '=': conversion from 'SIZE_T' to 'unsigned long', possible loss of data
+﻿  graphicsclass.cpp
   ATPlatforer.vcxproj -> D:\ATTaskNew\ATPlatforer\x64\Debug\ATPlatforer.exe

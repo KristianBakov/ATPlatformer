@@ -43,9 +43,12 @@ private:
 	bool Render(float);
 
 private:
+	float cameraZpos = -15.0f;
+	float cameraXpos = 0.0f;
+	float cameraYpos = 0.0f;
 	D3DClass* m_Direct3D;
 	CameraClass* m_Camera;
-	ModelClass* m_Model[2];
+	ModelClass* m_Model[4];
 	TextureShaderClass* m_TextureShader;
 	//LightShaderClass* m_LightShader;
 	//LightClass* m_Light;

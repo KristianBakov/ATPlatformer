@@ -1,6 +1,2 @@
-﻿  graphicsclass.cpp
-  main.cpp
-  modelclass.cpp
-  systemclass.cpp
-  Generating Code...
+﻿  modelclass.cpp
   ATPlatforer.vcxproj -> D:\ATTaskNew\ATPlatforer\x64\Debug\ATPlatforer.exe

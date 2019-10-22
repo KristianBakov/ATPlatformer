@@ -39,6 +39,10 @@ private:
 		XMFLOAT2 texture;
 		XMFLOAT3 normal;
 	};
+	struct InstanceType
+	{
+		XMFLOAT3 position;
+	};
 
 public:
 	ModelClass();
@@ -50,6 +54,8 @@ public:
 	void Render(ID3D11DeviceContext*);
 
 	int GetIndexCount();
+	int GetVertexCount();
+	int GetInstanceCount();
 
 	ID3D11ShaderResourceView* GetTexture();
 
@@ -65,10 +71,12 @@ private:
 	void ReleaseModel();
 
 private:
-	ID3D11Buffer *m_vertexBuffer, *m_indexBuffer;
+	ID3D11Buffer *m_vertexBuffer;
 	int m_vertexCount, m_indexCount;
 
+	ID3D11Buffer* m_instanceBuffer;
 	TextureClass* m_Texture;
+	int m_instanceCount;
 	ModelType* m_model;
 };
 

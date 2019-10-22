@@ -110,6 +110,7 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 	}
 
 	// Initialize the light object.
+	m_Light->SetAmbientColor(0.15f, 0.15f, 0.15f, 1.0f);
 	m_Light->SetDiffuseColor(1.0f, 1.0f, 1.0f, 1.0f);
 	m_Light->SetDirection(1.0f, 0.0f, 1.0f);
 
@@ -209,7 +210,7 @@ bool GraphicsClass::Frame()
 	}
 
 	m_Camera->SetPosition(cameraXpos, cameraYpos, cameraZpos);
-	//m_Camera->SetRotation(0.0f, 1.0f, 0.0f);
+	m_Camera->SetRotation(0.0f, 0.0f, 0.0f);
 
 	// Render the graphics scene.
 	result = Render(rotation);
@@ -260,7 +261,7 @@ bool GraphicsClass::Render(float rotation)
 //	m_Model[i]->GetTexture(), m_Light->GetDirection(), m_Light->GetDiffuseColor());
 
 	result = m_LightShader->Render(m_Direct3D->GetDeviceContext(), m_Model->GetVertexCount(), m_Model->GetInstanceCount(), worldMatrix, viewMatrix,
-		projectionMatrix, m_Model->GetTexture(), m_Light->GetDirection(), m_Light->GetDiffuseColor());
+		projectionMatrix, m_Model->GetTexture(), m_Light->GetDirection(), m_Light->GetAmbientColor(), m_Light->GetDiffuseColor());
 
 	if (!result)
 	{

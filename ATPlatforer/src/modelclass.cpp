@@ -108,7 +108,7 @@ bool ModelClass::InitializeBuffers(ID3D11Device* device)
 	D3D11_SUBRESOURCE_DATA vertexData, instanceData;
 	//unsigned long* indices;
 	//D3D11_BUFFER_DESC vertexBufferDesc, indexBufferDesc;
- //   D3D11_SUBRESOURCE_DATA vertexData, indexData;
+	//D3D11_SUBRESOURCE_DATA vertexData, indexData;
 	HRESULT result;
 
 
@@ -146,148 +146,111 @@ bool ModelClass::InitializeBuffers(ID3D11Device* device)
 	//vertices[0].position = XMFLOAT3(-1.0f,  1.0f, - 1.0f);  // Bottom left.
 	//vertices[0].texture = XMFLOAT2(0.0f, 1.0f);
 	////vertices[0].normal = XMFLOAT3(0.0f, 0.0f, -1.0f);
-
 	//vertices[1].position = XMFLOAT3(1.0f,  1.0f, - 1.0f);  // Top middle.
 	//vertices[1].texture = XMFLOAT2(0.5f, 0.0f);
 	////vertices[1].normal = XMFLOAT3(0.0f, 0.0f, -1.0f);
-
 	//vertices[2].position = XMFLOAT3(-1.0f, - 1.0f, - 1.0f);  // Bottom right.
 	//vertices[2].texture = XMFLOAT2(1.0f, 1.0f);
 	////vertices[2].normal = XMFLOAT3(0.0f, 0.0f, -1.0f);
-
 	//vertices[3].position = XMFLOAT3(-1.0f, - 1.0f, - 1.0f);  // Bottom left.
 	//vertices[3].texture = XMFLOAT2(0.0f, 1.0f);
 	////vertices[3].normal = XMFLOAT3(0.0f, 0.0f, -1.0f);
-
 	//vertices[4].position = XMFLOAT3(1.0f,  1.0f, - 1.0f);  // Top middle.
 	//vertices[4].texture = XMFLOAT2(0.5f, 0.0f);
 	////vertices[4].normal = XMFLOAT3(0.0f, 0.0f, -1.0f);
-
 	//vertices[5].position = XMFLOAT3(1.0f, - 1.0f, - 1.0f);  // Bottom right.
 	//vertices[5].texture = XMFLOAT2(1.0f, 1.0f);
 	////vertices[5].normal = XMFLOAT3(0.0f, 0.0f, -1.0f);
-
 	//vertices[6].position = XMFLOAT3(1.0f,  1.0f, - 1.0f);  // Bottom left.
 	//vertices[6].texture = XMFLOAT2(0.0f, 1.0f);
 	////vertices[6].normal = XMFLOAT3(0.0f, 0.0f, -1.0f);
-
 	//vertices[7].position = XMFLOAT3(1.0f,  1.0f,  1.0f);  // Top middle.
 	//vertices[7].texture = XMFLOAT2(0.5f, 0.0f);
 	////vertices[7].normal = XMFLOAT3(0.0f, 0.0f, -1.0f);
-
 	//vertices[8].position = XMFLOAT3(1.0f, - 1.0f, - 1.0f);  // Bottom right.
 	//vertices[8].texture = XMFLOAT2(1.0f, 1.0f);
 	////vertices[8].normal = XMFLOAT3(0.0f, 0.0f, -1.0f);
-
 	//vertices[9].position = XMFLOAT3(1.0f, - 1.0f, - 1.0f);  // Bottom left.
 	//vertices[9].texture = XMFLOAT2(0.0f, 1.0f);
 	////vertices[9].normal = XMFLOAT3(0.0f, 0.0f, -1.0f);
-
 	//vertices[10].position = XMFLOAT3(1.0f,  1.0f,  1.0f);  // Top middle.
 	//vertices[10].texture = XMFLOAT2(0.5f, 0.0f);
 	////vertices[10].normal = XMFLOAT3(0.0f, 0.0f, -1.0f);
-
 	//vertices[11].position = XMFLOAT3(1.0f, - 1.0f,  1.0f);  // Bottom right.
 	//vertices[11].texture = XMFLOAT2(1.0f, 1.0f);
 	////vertices[11].normal = XMFLOAT3(0.0f, 0.0f, -1.0f);
-
 	//vertices[12].position = XMFLOAT3(1.0f,  1.0f,  1.0f);  // Bottom left.
 	//vertices[12].texture = XMFLOAT2(0.0f, 1.0f);
 	////vertices[12].normal = XMFLOAT3(0.0f, 0.0f, -1.0f);
-
 	//vertices[13].position = XMFLOAT3(-1.0f,  1.0f,  1.0f);  // Top middle.
 	//vertices[13].texture = XMFLOAT2(0.5f, 0.0f);
 	////vertices[13].normal = XMFLOAT3(0.0f, 0.0f, -1.0f);
-
 	//vertices[14].position = XMFLOAT3(1.0f, - 1.0f,  1.0f);  // Bottom right.
 	//vertices[14].texture = XMFLOAT2(1.0f, 1.0f);
 	////vertices[14].normal = XMFLOAT3(0.0f, 0.0f, -1.0f);
-
 	//vertices[15].position = XMFLOAT3(1.0f, - 1.0f,  1.0f);  // Bottom left.
 	//vertices[15].texture = XMFLOAT2(0.0f, 1.0f);
 	////vertices[15].normal = XMFLOAT3(0.0f, 0.0f, -1.0f);
-
 	//vertices[16].position = XMFLOAT3(-1.0f,  1.0f,  1.0f);  // Top middle.
 	//vertices[16].texture = XMFLOAT2(0.5f, 0.0f);
 	////vertices[16].normal = XMFLOAT3(0.0f, 0.0f, -1.0f);
-
 	//vertices[17].position = XMFLOAT3(-1.0f, - 1.0f,  1.0f);  // Bottom right.
 	//vertices[17].texture = XMFLOAT2(1.0f, 1.0f);
 	////vertices[17].normal = XMFLOAT3(0.0f, 0.0f, -1.0f);
-
 	//vertices[18].position = XMFLOAT3(-1.0f,  1.0f,  1.0f);  // Bottom left.
 	//vertices[18].texture = XMFLOAT2(0.0f, 1.0f);
 	////vertices[18].normal = XMFLOAT3(0.0f, 0.0f, -1.0f);
-
 	//vertices[19].position = XMFLOAT3(-1.0f,  1.0f, - 1.0f);  // Top middle.
 	//vertices[19].texture = XMFLOAT2(0.5f, 0.0f);
 	////vertices[19].normal = XMFLOAT3(0.0f, 0.0f, -1.0f);
-
 	//vertices[20].position = XMFLOAT3(-1.0f, - 1.0f,  1.0f);  // Bottom right.
 	//vertices[20].texture = XMFLOAT2(1.0f, 1.0f);
 	////vertices[20].normal = XMFLOAT3(0.0f, 0.0f, -1.0f);
-
 	//vertices[21].position = XMFLOAT3(-1.0f, - 1.0f,  1.0f);  // Bottom left.
 	//vertices[21].texture = XMFLOAT2(0.0f, 1.0f);
 	////vertices[21].normal = XMFLOAT3(0.0f, 0.0f, -1.0f);
-
 	//vertices[22].position = XMFLOAT3(-1.0f,  1.0f, - 1.0f);  // Top middle.
 	//vertices[22].texture = XMFLOAT2(0.5f, 0.0f);
 	////vertices[22].normal = XMFLOAT3(0.0f, 0.0f, -1.0f);
-
 	//vertices[23].position = XMFLOAT3(-1.0f, - 1.0f, - 1.0f);  // Bottom right.
 	//vertices[23].texture = XMFLOAT2(1.0f, 1.0f);
 	////vertices[23].normal = XMFLOAT3(0.0f, 0.0f, -1.0f);
-
 	//vertices[24].position = XMFLOAT3(-1.0f,  1.0f,  1.0f);  // Bottom left.
 	//vertices[24].texture = XMFLOAT2(0.0f, 1.0f);
 	////vertices[24].normal = XMFLOAT3(0.0f, 0.0f, -1.0f);
-
 	//vertices[25].position = XMFLOAT3(1.0f,  1.0f,  1.0f);  // Top middle.
 	//vertices[25].texture = XMFLOAT2(0.5f, 0.0f);
 	////vertices[25].normal = XMFLOAT3(0.0f, 0.0f, -1.0f);
-
 	//vertices[26].position = XMFLOAT3(-1.0f,  1.0f, - 1.0f);  // Bottom right.
 	//vertices[26].texture = XMFLOAT2(1.0f, 1.0f);
 	////vertices[26].normal = XMFLOAT3(0.0f, 0.0f, -1.0f);
-
 	//vertices[27].position = XMFLOAT3(-1.0f,  1.0f, - 1.0f);  // Bottom left.
 	//vertices[27].texture = XMFLOAT2(0.0f, 1.0f);
 	////vertices[27].normal = XMFLOAT3(0.0f, 0.0f, -1.0f);
-
 	//vertices[28].position = XMFLOAT3(1.0f,  1.0f,  1.0f);  // Top middle.
 	//vertices[28].texture = XMFLOAT2(0.5f, 0.0f);
 	////vertices[28].normal = XMFLOAT3(0.0f, 0.0f, -1.0f);
-
 	//vertices[29].position = XMFLOAT3(1.0f,  1.0f, - 1.0f);  // Bottom right.
 	//vertices[29].texture = XMFLOAT2(1.0f, 1.0f);
 	////vertices[29].normal = XMFLOAT3(0.0f, 0.0f, -1.0f);
-
 	//vertices[30].position = XMFLOAT3(-1.0f, - 1.0f, - 1.0f);  // Bottom left.
 	//vertices[30].texture = XMFLOAT2(0.0f, 1.0f);
 	////vertices[30].normal = XMFLOAT3(0.0f, 0.0f, -1.0f);
-
 	//vertices[31].position = XMFLOAT3(1.0f, - 1.0f, - 1.0f);  // Top middle.
 	//vertices[31].texture = XMFLOAT2(0.5f, 0.0f);
 	////vertices[31].normal = XMFLOAT3(0.0f, 0.0f, -1.0f);
-
 	//vertices[32].position = XMFLOAT3(-1.0f, - 1.0f,  1.0f);  // Bottom right.
 	//vertices[32].texture = XMFLOAT2(1.0f, 1.0f);
 	////vertices[32].normal = XMFLOAT3(0.0f, 0.0f, -1.0f);
-
 	//vertices[33].position = XMFLOAT3(-1.0f, - 1.0f,  1.0f);  // Bottom left.
 	//vertices[33].texture = XMFLOAT2(0.0f, 1.0f);
 	////vertices[33].normal = XMFLOAT3(0.0f, 0.0f, -1.0f);
-
 	//vertices[34].position = XMFLOAT3(1.0f, - 1.0f, - 1.0f);  // Top middle.
 	//vertices[34].texture = XMFLOAT2(0.5f, 0.0f);
 	////vertices[34].normal = XMFLOAT3(0.0f, 0.0f, -1.0f);
-
 	//vertices[35].position = XMFLOAT3(1.0f, - 1.0f,  1.0f);  // Bottom right.
 	//vertices[35].texture = XMFLOAT2(1.0f, 1.0f);
 	////vertices[35].normal = XMFLOAT3(0.0f, 0.0f, -1.0f);
-
-
 
 	//// Load the index array with data.
 	//indices[0] = 0;  // Bottom left.
@@ -328,10 +291,6 @@ bool ModelClass::InitializeBuffers(ID3D11Device* device)
 	//indices[35] = 35;  // Top middle.
 
 
-
-
-
-
 	// Set up the description of the static vertex buffer.
     vertexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
     vertexBufferDesc.ByteWidth = sizeof(VertexType) * m_vertexCount;
@@ -359,12 +318,10 @@ bool ModelClass::InitializeBuffers(ID3D11Device* device)
  //   indexBufferDesc.CPUAccessFlags = 0;
  //   indexBufferDesc.MiscFlags = 0;
 	//indexBufferDesc.StructureByteStride = 0;
-
 	//// Give the subresource structure a pointer to the index data.
  //   indexData.pSysMem = indices;
 	//indexData.SysMemPitch = 0;
 	//indexData.SysMemSlicePitch = 0;
-
 	//// Create the index buffer.
 	//result = device->CreateBuffer(&indexBufferDesc, &indexData, &m_indexBuffer);
 	//if(FAILED(result))
@@ -380,7 +337,7 @@ bool ModelClass::InitializeBuffers(ID3D11Device* device)
 	//indices = 0;
 
 	// Set the number of instances in the array.
-	m_instanceCount = 4;
+	m_instanceCount = 1000;
 
 	// Create the instance array.
 	instances = new InstanceType[m_instanceCount];
@@ -389,11 +346,22 @@ bool ModelClass::InitializeBuffers(ID3D11Device* device)
 		return false;
 	}
 
-	// Load the instance array with data.
-	instances[0].position = XMFLOAT3(-1.5f, -1.5f, 5.0f);
-	instances[1].position = XMFLOAT3(-1.5f, 1.5f, 5.0f);
-	instances[2].position = XMFLOAT3(1.5f, -1.5f, 5.0f);
-	instances[3].position = XMFLOAT3(1.5f, 1.5f, 5.0f);
+	for (int i = 0; i < 10; i++)
+	{
+		for (int j = 0; j < 10; j++)
+		{
+			for (int k = 0; k < 10; k++)
+			{
+				int instance = i * 100 + j * 10 + k;
+				instances[instance].position = XMFLOAT3(i * 10, j * 10, k * 10);
+			}
+		}
+	}
+	//// Load the instance array with data.
+	//instances[0].position = XMFLOAT3(-1.5f, -1.5f, 5.0f);
+	//instances[1].position = XMFLOAT3(-1.5f, 1.5f, 5.0f);
+	//instances[2].position = XMFLOAT3(1.5f, -1.5f, 5.0f);
+	//instances[3].position = XMFLOAT3(1.5f, 1.5f, 5.0f);
 
 	// Set up the description of the instance buffer.
 	instanceBufferDesc.Usage = D3D11_USAGE_DEFAULT;

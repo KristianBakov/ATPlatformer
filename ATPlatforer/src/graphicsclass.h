@@ -38,6 +38,7 @@ public:
 	bool Initialize(int, int, HWND);
 	void Shutdown();
 	bool Frame();
+	const static int models = 2;
 
 private:
 	bool Render(float);
@@ -48,7 +49,7 @@ private:
 	float cameraZrot = 0.0f;
 	D3DClass* m_Direct3D;
 	CameraClass* m_Camera;
-	ModelClass* m_Model;
+	ModelClass* m_Model[models];
 	//TextureShaderClass* m_TextureShader;
 	LightShaderClass* m_LightShader;
 	LightClass* m_Light;

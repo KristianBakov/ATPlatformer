@@ -337,7 +337,7 @@ bool ModelClass::InitializeBuffers(ID3D11Device* device)
 	//indices = 0;
 
 	// Set the number of instances in the array.
-	m_instanceCount = 1000;
+	m_instanceCount = 2;
 
 	// Create the instance array.
 	instances = new InstanceType[m_instanceCount];
@@ -346,17 +346,30 @@ bool ModelClass::InitializeBuffers(ID3D11Device* device)
 		return false;
 	}
 
-	for (int i = 0; i < 10; i++)
-	{
-		for (int j = 0; j < 10; j++)
-		{
-			for (int k = 0; k < 10; k++)
-			{
-				int instance = i * 100 + j * 10 + k;
-				instances[instance].position = XMFLOAT3(i * 10, j * 10, k * 10);
-			}
-		}
-	}
+
+
+	//for (int i = 0; i < 100; i++)
+	//{
+	//	for (int j = 0; j < 10; j++)
+	//	{
+
+	//		int instance = i * 100 + j;
+	//		instances[instance].position = XMFLOAT3(i * 2, 0.0f , j * 2);
+	//	}
+	//}
+	instances[0].position = XMFLOAT3(0,0,0);
+
+	//for (int i = 0; i < 10; i++)
+	//{
+	//	for (int j = 0; j < 10; j++)
+	//	{
+	//		for (int k = 0; k < 10; k++)
+	//		{
+	//			int instance = i * 100 + j * 10 + k;
+	//			instances[instance].position = XMFLOAT3(i * 10, j * 10, k * 10);
+	//		}
+	//	}
+	//}
 	//// Load the instance array with data.
 	//instances[0].position = XMFLOAT3(-1.5f, -1.5f, 5.0f);
 	//instances[1].position = XMFLOAT3(-1.5f, 1.5f, 5.0f);

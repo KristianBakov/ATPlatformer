@@ -2,6 +2,7 @@
 // Filename: graphicsclass.cpp
 ////////////////////////////////////////////////////////////////////////////////
 #include "graphicsclass.h"
+#include <timeapi.h>
 
 
 GraphicsClass::GraphicsClass()
@@ -177,6 +178,8 @@ bool GraphicsClass::Frame()
 	bool result;
 
 	static float rotation = 0.0f;
+	static float m_previousTime = 0.0f;
+	static float m_delta = 0.0f;
 
 	// Update the rotation variable each frame.
 	rotation += (float)XM_PI * 0.01f;
@@ -184,46 +187,49 @@ bool GraphicsClass::Frame()
 	{
 		rotation -= 360.0f;
 	}
+	float current_time = (float)timeGetTime();
+	m_delta = (current_time - m_previousTime) * 0.001f;
+	m_previousTime = current_time;
 
 	if (GetKeyState('W') & 0x8000)
 	{
-		m_Camera->SetSpeedForward(1);
+		m_Camera->SetSpeedForward(10 * m_delta);
 	}
 	if (GetKeyState('A') & 0x8000)
 	{
-		m_Camera->SetSpeedRight(-1);
+		m_Camera->SetSpeedRight(-10 * m_delta);
 	}
 	if (GetKeyState('D') & 0x8000)
 	{
-		m_Camera->SetSpeedRight(1);
+		m_Camera->SetSpeedRight(10 * m_delta);
 	}
 	if (GetKeyState('S') & 0x8000)
 	{
-		m_Camera->SetSpeedForward(-1);
+		m_Camera->SetSpeedForward(-10 * m_delta);
 	}
 	if (GetKeyState('R') & 0x8000)
 	{
-		m_Camera->SetPosition(m_Camera->GetPosition().x, m_Camera->GetPosition().y + 1, m_Camera->GetPosition().z);
+		m_Camera->SetPosition(m_Camera->GetPosition().x, m_Camera->GetPosition().y + 10 * m_delta, m_Camera->GetPosition().z);
 	}
 	if (GetKeyState('F') & 0x8000)
 	{
-		m_Camera->SetPosition(m_Camera->GetPosition().x, m_Camera->GetPosition().y - 1, m_Camera->GetPosition().z);
+		m_Camera->SetPosition(m_Camera->GetPosition().x, m_Camera->GetPosition().y - 10 * m_delta, m_Camera->GetPosition().z);
 	}
 	if (GetKeyState(VK_UP) & 0x8000)
 	{
-		cameraXrot = m_Camera->GetRotation().x - 1;
+		cameraXrot = m_Camera->GetRotation().x - 20 * m_delta;
 	}
 	if (GetKeyState(VK_DOWN) & 0x8000)
 	{
-		cameraXrot = m_Camera->GetRotation().x + 1;
+		cameraXrot = m_Camera->GetRotation().x + 20 * m_delta;
 	}
 	if (GetKeyState(VK_LEFT) & 0x8000)
 	{
-		cameraYrot = m_Camera->GetRotation().y - 1;
+		cameraYrot = m_Camera->GetRotation().y - 20 * m_delta;
 	}
 	if (GetKeyState(VK_RIGHT) & 0x8000)
 	{
-		cameraYrot = m_Camera->GetRotation().y + 1;
+		cameraYrot = m_Camera->GetRotation().y + 20 * m_delta;
 	}
 
 	m_Camera->SetRotation(cameraXrot, cameraYrot, cameraZrot);

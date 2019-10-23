@@ -53,7 +53,8 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 	}
 
 	// Set the initial position of the camera.
-	m_Camera->SetPosition(cameraXpos, cameraYpos, cameraZpos);
+	m_Camera->SetPosition(-15.0f, 0.0f, 0.0f);
+	m_Camera->SetRotation(0.0f, 0.0f, 0.0f);
 
 
 		// Create the model object.
@@ -186,31 +187,46 @@ bool GraphicsClass::Frame()
 
 	if (GetKeyState('W') & 0x8000)
 	{
-		cameraZpos++;
+		m_Camera->SetSpeedForward(1);
 	}
 	if (GetKeyState('A') & 0x8000)
 	{
-		cameraXpos--;
+		m_Camera->SetSpeedRight(-1);
 	}
 	if (GetKeyState('D') & 0x8000)
 	{
-		cameraXpos++;
+		m_Camera->SetSpeedRight(1);
 	}
 	if (GetKeyState('S') & 0x8000)
 	{
-		cameraZpos--;
+		m_Camera->SetSpeedForward(-1);
 	}
 	if (GetKeyState('R') & 0x8000)
 	{
-		cameraYpos++;
+		m_Camera->SetPosition(m_Camera->GetPosition().x, m_Camera->GetPosition().y + 1, m_Camera->GetPosition().z);
 	}
 	if (GetKeyState('F') & 0x8000)
 	{
-		cameraYpos--;
+		m_Camera->SetPosition(m_Camera->GetPosition().x, m_Camera->GetPosition().y - 1, m_Camera->GetPosition().z);
+	}
+	if (GetKeyState(VK_UP) & 0x8000)
+	{
+		cameraXrot = m_Camera->GetRotation().x - 1;
+	}
+	if (GetKeyState(VK_DOWN) & 0x8000)
+	{
+		cameraXrot = m_Camera->GetRotation().x + 1;
+	}
+	if (GetKeyState(VK_LEFT) & 0x8000)
+	{
+		cameraYrot = m_Camera->GetRotation().y - 1;
+	}
+	if (GetKeyState(VK_RIGHT) & 0x8000)
+	{
+		cameraYrot = m_Camera->GetRotation().y + 1;
 	}
 
-	m_Camera->SetPosition(cameraXpos, cameraYpos, cameraZpos);
-	m_Camera->SetRotation(0.0f, 0.0f, 0.0f);
+	m_Camera->SetRotation(cameraXrot, cameraYrot, cameraZrot);
 
 	// Render the graphics scene.
 	result = Render(rotation);

@@ -55,6 +55,16 @@ XMFLOAT3 CameraClass::GetRotation()
 	return XMFLOAT3(m_rotationX, m_rotationY, m_rotationZ);
 }
 
+XMVECTOR CameraClass::GetCamRight()
+{
+	return Camright;
+}
+
+XMVECTOR CameraClass::GetCamForward()
+{
+	return Camforward;
+}
+
 
 void CameraClass::Render()
 {
@@ -93,6 +103,23 @@ void CameraClass::Render()
 	yaw   = m_rotationY * 0.0174532925f;
 	roll  = m_rotationZ * 0.0174532925f;
 
+	XMMATRIX RotY;
+	RotY = XMMatrixRotationY(yaw);
+	Camright = XMVector3TransformCoord(right, RotY);
+	Camforward = XMVector3TransformCoord(forward, RotY);
+
+	positionVector = XMVectorAdd(positionVector, forwardspeed * Camforward);
+	positionVector = XMVectorAdd(positionVector, rightspeed * Camright);
+
+	XMFLOAT3 vFor, vRig;
+	XMStoreFloat3(&vFor, Camforward);
+	XMStoreFloat3(&vRig, Camright);
+
+	m_positionX += (vFor.x * forwardspeed) + (vRig.x * rightspeed);
+	m_positionY += (vFor.y * forwardspeed) + (vRig.y * rightspeed);
+	m_positionZ += (vFor.z * forwardspeed) + (vRig.z * rightspeed);
+
+
 	// Create the rotation matrix from the yaw, pitch, and roll values.
 	rotationMatrix = XMMatrixRotationRollPitchYaw(pitch, yaw, roll);
 
@@ -106,6 +133,9 @@ void CameraClass::Render()
 	// Finally create the view matrix from the three updated vectors.
 	m_viewMatrix = XMMatrixLookAtLH(positionVector, lookAtVector, upVector);
 
+	forwardspeed = 0;
+	rightspeed = 0;
+
 	return;
 }
 
@@ -114,4 +144,14 @@ void CameraClass::GetViewMatrix(XMMATRIX& viewMatrix)
 {
 	viewMatrix = m_viewMatrix;
 	return;
+}
+
+void CameraClass::SetSpeedForward(float speed_in)
+{
+	forwardspeed = speed_in;
+}
+
+void CameraClass::SetSpeedRight(float speed_in)
+{
+	rightspeed = speed_in;
 }

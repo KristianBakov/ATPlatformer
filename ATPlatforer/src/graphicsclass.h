@@ -43,9 +43,9 @@ private:
 	bool Render(float);
 
 private:
-	float cameraZpos = -15.0f;
-	float cameraXpos = 0.0f;
-	float cameraYpos = 0.0f;
+	float cameraXrot = 0.0f;
+	float cameraYrot = 0.0f;
+	float cameraZrot = 0.0f;
 	D3DClass* m_Direct3D;
 	CameraClass* m_Camera;
 	ModelClass* m_Model;

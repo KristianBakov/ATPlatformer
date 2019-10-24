@@ -265,7 +265,7 @@ bool GraphicsClass::Render(float rotation)
 {
 	XMMATRIX worldMatrix, viewMatrix, projectionMatrix;
 	bool result;
-
+	m_Model[0]->SetInstanceCount(1);
 
 	// Clear the buffers to begin the scene.
 	m_Direct3D->BeginScene(0.0f, 0.2f, 0.0f, 1.0f);

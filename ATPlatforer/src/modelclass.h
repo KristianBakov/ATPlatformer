@@ -57,6 +57,8 @@ public:
 	int GetVertexCount();
 	int GetInstanceCount();
 
+	void SetInstanceCount(int count_in);
+
 	ID3D11ShaderResourceView* GetTexture();
 
 private:

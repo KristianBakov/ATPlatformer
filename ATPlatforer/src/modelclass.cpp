@@ -95,6 +95,11 @@ int ModelClass::GetIndexCount()
 	return m_indexCount;
 }
 
+void ModelClass::SetInstanceCount(int count_in)
+{
+	m_instanceCount = count_in;
+}
+
 ID3D11ShaderResourceView* ModelClass::GetTexture()
 {
 	return m_Texture->GetTexture();
@@ -337,7 +342,7 @@ bool ModelClass::InitializeBuffers(ID3D11Device* device)
 	//indices = 0;
 
 	// Set the number of instances in the array.
-	m_instanceCount = 2;
+	m_instanceCount = 5;
 
 	// Create the instance array.
 	instances = new InstanceType[m_instanceCount];
@@ -357,7 +362,13 @@ bool ModelClass::InitializeBuffers(ID3D11Device* device)
 	//		instances[instance].position = XMFLOAT3(i * 2, 0.0f , j * 2);
 	//	}
 	//}
-	instances[0].position = XMFLOAT3(0,0,0);
+
+		instances[0].position = XMFLOAT3(0, 0, 0);
+		instances[1].position = XMFLOAT3(2, 2, 2);
+		instances[2].position = XMFLOAT3(3, 3, 3);
+		instances[3].position = XMFLOAT3(4, 4, 4);
+		instances[4].position = XMFLOAT3(5, 5, 5);
+	//	instances[5].position = XMFLOAT3(6, 6, 6);
 
 	//for (int i = 0; i < 10; i++)
 	//{

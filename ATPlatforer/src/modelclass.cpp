@@ -90,6 +90,8 @@ int ModelClass::GetInstanceCount()
 
 
 
+
+
 int ModelClass::GetIndexCount()
 {
 	return m_indexCount;
@@ -357,17 +359,19 @@ bool ModelClass::InitializeBuffers(ID3D11Device* device)
 	//{
 	//	for (int j = 0; j < 10; j++)
 	//	{
-
 	//		int instance = i * 100 + j;
 	//		instances[instance].position = XMFLOAT3(i * 2, 0.0f , j * 2);
 	//	}
 	//}
-
-		instances[0].position = XMFLOAT3(0, 0, 0);
-		instances[1].position = XMFLOAT3(2, 2, 2);
-		instances[2].position = XMFLOAT3(3, 3, 3);
-		instances[3].position = XMFLOAT3(4, 4, 4);
-		instances[4].position = XMFLOAT3(5, 5, 5);
+	for (int i = 0; i < m_instanceCount; i++)
+	{
+		instances[i].position = XMFLOAT3(i * 10, 0.0f, 0.0f);
+	}
+		//instances[0].position = XMFLOAT3(0, 0, 0);
+		//instances[1].position = XMFLOAT3(2, 2, 2);
+		//instances[2].position = XMFLOAT3(3, 3, 3);
+		//instances[3].position = XMFLOAT3(4, 4, 4);
+		//instances[4].position = XMFLOAT3(5, 5, 5);
 	//	instances[5].position = XMFLOAT3(6, 6, 6);
 
 	//for (int i = 0; i < 10; i++)
@@ -388,10 +392,10 @@ bool ModelClass::InitializeBuffers(ID3D11Device* device)
 	//instances[3].position = XMFLOAT3(1.5f, 1.5f, 5.0f);
 
 	// Set up the description of the instance buffer.
-	instanceBufferDesc.Usage = D3D11_USAGE_DEFAULT;
+	instanceBufferDesc.Usage = D3D11_USAGE_DYNAMIC;
 	instanceBufferDesc.ByteWidth = sizeof(InstanceType) * m_instanceCount;
 	instanceBufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
-	instanceBufferDesc.CPUAccessFlags = 0;
+	instanceBufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
 	instanceBufferDesc.MiscFlags = 0;
 	instanceBufferDesc.StructureByteStride = 0;
 

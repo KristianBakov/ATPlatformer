@@ -95,6 +95,8 @@ public:
 	XMMATRIX Translation;
 	XMVECTOR Dir;
 
+	bool iscollided = false;
+
 	D3D11_SUBRESOURCE_DATA vertexData, instanceData;
 
 	ID3D11Buffer* m_vertexBuffer;

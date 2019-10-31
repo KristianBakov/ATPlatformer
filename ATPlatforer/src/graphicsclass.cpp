@@ -59,7 +59,7 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 	}
 
 	// Set the initial position of the camera.
-	m_Camera->SetPosition(0.0f, 1.0f, -10.0f);
+	m_Camera->SetPosition(0.0f, 4.0f, 0.0f);
 	m_Camera->SetRotation(0.0f, 0.0f, 0.0f);
 
 
@@ -233,6 +233,7 @@ bool GraphicsClass::Frame()
 	m_delta = (current_time - m_previousTime) * 0.001f;
 	m_previousTime = current_time;
 
+	
 	if (GetKeyState('W') & 0x8000)
 	{
 		m_Camera->SetSpeedForward(10 * m_delta);
@@ -251,11 +252,12 @@ bool GraphicsClass::Frame()
 	}
 	if (GetKeyState('R') & 0x8000)
 	{
-		m_Camera->SetPosition(m_Camera->GetPosition().x, m_Camera->GetPosition().y + 10 * m_delta, m_Camera->GetPosition().z);
+		m_Camera->SetSpeedUp(10 * m_delta);
 	}
 	if (GetKeyState('F') & 0x8000)
 	{
-		m_Camera->SetPosition(m_Camera->GetPosition().x, m_Camera->GetPosition().y - 10 * m_delta, m_Camera->GetPosition().z);
+		//m_Camera->SetPosition(m_Camera->GetPosition().x, m_Camera->GetPosition().y - 10 * m_delta, m_Camera->GetPosition().z);
+		m_Camera->SetSpeedUp(-10 * m_delta);
 	}
 	if (GetKeyState(VK_UP) & 0x8000)
 	{
@@ -273,6 +275,14 @@ bool GraphicsClass::Frame()
 	{
 		cameraYrot = m_Camera->GetRotation().y + 60 * m_delta;
 	}
+
+	//for (int i = 0; i < models; i++)
+	//{
+	//	if (!colliding)
+	//	{
+	//		m_Camera->SetSpeedUp(-0.01f);
+	//	}
+	//}
 
 	m_Camera->SetRotation(cameraXrot, cameraYrot, cameraZrot);
 
@@ -305,6 +315,7 @@ bool GraphicsClass::Render(float rotation)
 	m_Camera->GetViewMatrix(viewMatrix);
 	m_Direct3D->GetProjectionMatrix(projectionMatrix);
 
+	m_Model[1]->AABBWorld = XMMatrixTranslation(0, 0, 5);
 	m_Player->AABBWorld = XMMatrixTranslation(m_Camera->GetPosition().x, m_Camera->GetPosition().y, m_Camera->GetPosition().z);
 
 	//D3D11_MAPPED_SUBRESOURCE resource;
@@ -316,18 +327,59 @@ bool GraphicsClass::Render(float rotation)
 	m_Model[0]->CalculateAABB(m_Model[0]->BoundingBoxVertPosArray, m_Model[0]->AABBWorld, m_Model[0]->BoundingBoxMinVertex, m_Model[0]->BoundingBoxMaxVertex);
 
 	m_Model[1]->CalculateAABB(m_Model[1]->BoundingBoxVertPosArray, m_Model[1]->AABBWorld, m_Model[1]->BoundingBoxMinVertex, m_Model[1]->BoundingBoxMaxVertex);
-	if (m_Player->BoundingBoxCollision(m_Player->BoundingBoxMinVertex, m_Player->BoundingBoxMaxVertex, m_Player->AABBWorld,
-		m_Model[1]->BoundingBoxMinVertex, m_Model[1]->BoundingBoxMaxVertex, m_Model[1]->AABBWorld))
-	{
-		printf("collision");
-		//worldMatrix = XMMatrixRotationY(rotation);
 
-
-	}
-	else
+	for (int i = 0; i < models; i++)
 	{
-		printf("no collison");
+		if (m_Player->BoundingBoxCollision(m_Player->BoundingBoxMinVertex, m_Player->BoundingBoxMaxVertex, m_Player->AABBWorld,
+			m_Model[i]->BoundingBoxMinVertex, m_Model[i]->BoundingBoxMaxVertex, m_Model[i]->AABBWorld))
+		{
+			//printf("collision");
+			colliding = true;
+			//worldMatrix = XMMatrixRotationY(rotation);
+		}
+		else
+		{
+			if (!colliding)
+			{
+				m_Camera->SetSpeedUp(-0.01f);
+			}
+			colliding = false;
+			//printf("no collison");
+		}
 	}
+	//if (m_Player->BoundingBoxCollision(m_Player->BoundingBoxMinVertex, m_Player->BoundingBoxMaxVertex, m_Player->AABBWorld,
+	//	m_Model[0]->BoundingBoxMinVertex, m_Model[0]->BoundingBoxMaxVertex, m_Model[0]->AABBWorld))
+	//{
+	//	//printf("collision");
+	//	colliding = true;
+	//	//worldMatrix = XMMatrixRotationY(rotation);
+	//}
+	//else
+	//{
+	//	if (!colliding)
+	//	{
+	//	m_Camera->SetSpeedUp(-0.01f);
+	//	}
+	//	colliding = false;
+	//	//printf("no collison");
+	//}
+
+	//if (m_Player->BoundingBoxCollision(m_Player->BoundingBoxMinVertex, m_Player->BoundingBoxMaxVertex, m_Player->AABBWorld,
+	//	m_Model[1]->BoundingBoxMinVertex, m_Model[1]->BoundingBoxMaxVertex, m_Model[1]->AABBWorld))
+	//{
+	//	//printf("collision");
+	//	colliding = true;
+	//	//worldMatrix = XMMatrixRotationY(rotation);
+	//}
+	//else
+	//{
+	//	if (!colliding)
+	//	{
+	//	m_Camera->SetSpeedUp(-0.01f);
+	//	}
+	//	colliding = false;
+	//	//printf("no collison");
+	//}
 
 	// Rotate the world matrix by the rotation value so that the cube will spin.
 	//worldMatrix = XMMatrixRotationY(rotation);

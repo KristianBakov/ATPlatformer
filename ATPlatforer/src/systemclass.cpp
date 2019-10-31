@@ -85,7 +85,6 @@ void SystemClass::Shutdown()
 	return;
 }
 
-
 void SystemClass::Run()
 {
 	MSG msg;

@@ -47,6 +47,9 @@ private:
 	float cameraXrot = 0.0f;
 	float cameraYrot = 0.0f;
 	float cameraZrot = 0.0f;
+	bool colliding;
+
+
 	D3DClass* m_Direct3D;
 	CameraClass* m_Camera;
 	ModelClass* m_Model[models];

@@ -13,6 +13,8 @@ GraphicsClass::GraphicsClass()
 	{
 		m_Model[i] = 0;
 	}
+
+	m_Player = 0;
 	//m_TextureShader = 0;
 	m_LightShader = 0;
 	m_Light = 0;
@@ -70,9 +72,23 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 			return false;
 		}
 	}
+
+	m_Player = new ModelClass;
+	if (!m_Player)
+	{
+		return false;
+	}
 		
 		// Initialize the model object
 		//result = m_Model[i]->Initialize(m_Direct3D->GetDevice(), m_Direct3D->GetDeviceContext(), (char*)"../src/stone01.tga");
+
+	result = m_Player->Initialize(m_Direct3D->GetDevice(), m_Direct3D->GetDeviceContext(), (char*)"../src/cube.txt", (char*)"../src/stone01.tga");
+	if (!result)
+	{
+		MessageBox(hwnd, L"Could not initialize the model object.", L"Error", MB_OK);
+		return false;
+	}
+
 	result = m_Model[0]->Initialize(m_Direct3D->GetDevice(), m_Direct3D->GetDeviceContext(), (char*)"../src/cube.txt", (char*)"../src/stone01.tga");
 	if (!result)
 	{
@@ -86,7 +102,7 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 		MessageBox(hwnd, L"Could not initialize the model object.", L"Error", MB_OK);
 		return false;
 	}
-
+	m_Player->CreateBoundingVolumes(m_Player->VertPosArray, m_Player->BoundingBoxVertPosArray, m_Player->BoundingSphere, m_Player->CenterOffset);
 	m_Model[0]->CreateBoundingVolumes(m_Model[0]->VertPosArray, m_Model[0]->BoundingBoxVertPosArray, m_Model[0]->BoundingSphere, m_Model[0]->CenterOffset);
 	m_Model[1]->CreateBoundingVolumes(m_Model[1]->VertPosArray, m_Model[1]->BoundingBoxVertPosArray, m_Model[1]->BoundingSphere, m_Model[1]->CenterOffset);
 
@@ -171,6 +187,13 @@ void GraphicsClass::Shutdown()
 			delete m_Model[i];
 			m_Model[i] = 0;
 		}
+	}
+
+	if (m_Player)
+	{
+		m_Player->Shutdown();
+		delete m_Player;
+		m_Player = 0;
 	}
 
 	// Release the camera object.
@@ -282,16 +305,18 @@ bool GraphicsClass::Render(float rotation)
 	m_Camera->GetViewMatrix(viewMatrix);
 	m_Direct3D->GetProjectionMatrix(projectionMatrix);
 
-	m_Model[0]->AABBWorld = XMMatrixTranslation(-10,0,0);
+	m_Player->AABBWorld = XMMatrixTranslation(m_Camera->GetPosition().x, m_Camera->GetPosition().y, m_Camera->GetPosition().z);
 
 	//D3D11_MAPPED_SUBRESOURCE resource;
 	//m_Direct3D->GetDeviceContext()->Map(m_Model[0]->m_vertexBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &resource);
 	//memcpy(resource.pData, &m_Model[0]->vertexData, m_Model[0]->GetVertexBufferSize());
 	//m_Direct3D->GetDeviceContext()->Unmap(m_Model[0]->m_vertexBuffer, 0);
 
+	m_Player->CalculateAABB(m_Player->BoundingBoxVertPosArray, m_Player->AABBWorld, m_Player->BoundingBoxMinVertex, m_Player->BoundingBoxMaxVertex);
 	m_Model[0]->CalculateAABB(m_Model[0]->BoundingBoxVertPosArray, m_Model[0]->AABBWorld, m_Model[0]->BoundingBoxMinVertex, m_Model[0]->BoundingBoxMaxVertex);
+
 	m_Model[1]->CalculateAABB(m_Model[1]->BoundingBoxVertPosArray, m_Model[1]->AABBWorld, m_Model[1]->BoundingBoxMinVertex, m_Model[1]->BoundingBoxMaxVertex);
-	if (m_Model[0]->BoundingBoxCollision(m_Model[0]->BoundingBoxMinVertex, m_Model[0]->BoundingBoxMaxVertex, m_Model[1]->AABBWorld,
+	if (m_Player->BoundingBoxCollision(m_Player->BoundingBoxMinVertex, m_Player->BoundingBoxMaxVertex, m_Player->AABBWorld,
 		m_Model[1]->BoundingBoxMinVertex, m_Model[1]->BoundingBoxMaxVertex, m_Model[1]->AABBWorld))
 	{
 		printf("collision");

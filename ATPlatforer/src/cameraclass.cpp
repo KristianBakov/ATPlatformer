@@ -65,6 +65,11 @@ XMVECTOR CameraClass::GetCamForward()
 	return Camforward;
 }
 
+XMVECTOR CameraClass::GetCamUp()
+{
+	return Camup;
+}
+
 
 void CameraClass::Render()
 {
@@ -107,17 +112,20 @@ void CameraClass::Render()
 	RotY = XMMatrixRotationY(yaw);
 	Camright = XMVector3TransformCoord(right, RotY);
 	Camforward = XMVector3TransformCoord(forward, RotY);
+	Camup = XMVector3TransformCoord(upv, RotY);
 
 	positionVector = XMVectorAdd(positionVector, forwardspeed * Camforward);
 	positionVector = XMVectorAdd(positionVector, rightspeed * Camright);
+	positionVector = XMVectorAdd(positionVector, upspeed * Camup);
 
-	XMFLOAT3 vFor, vRig;
+	XMFLOAT3 vFor, vRig, vUp;
 	XMStoreFloat3(&vFor, Camforward);
 	XMStoreFloat3(&vRig, Camright);
+	XMStoreFloat3(&vUp, Camup);
 
-	m_positionX += (vFor.x * forwardspeed) + (vRig.x * rightspeed);
-	m_positionY += (vFor.y * forwardspeed) + (vRig.y * rightspeed);
-	m_positionZ += (vFor.z * forwardspeed) + (vRig.z * rightspeed);
+	m_positionX += (vFor.x * forwardspeed) + (vRig.x * rightspeed) + (vUp.x * upspeed);
+	m_positionY += (vFor.y * forwardspeed) + (vRig.y * rightspeed) + (vUp.y * upspeed);
+	m_positionZ += (vFor.z * forwardspeed) + (vRig.z * rightspeed) + (vUp.z * upspeed);
 
 
 	// Create the rotation matrix from the yaw, pitch, and roll values.
@@ -135,6 +143,7 @@ void CameraClass::Render()
 
 	forwardspeed = 0;
 	rightspeed = 0;
+	upspeed = 0;
 
 	return;
 }
@@ -154,4 +163,9 @@ void CameraClass::SetSpeedForward(float speed_in)
 void CameraClass::SetSpeedRight(float speed_in)
 {
 	rightspeed = speed_in;
+}
+
+void CameraClass::SetSpeedUp(float speed_in)
+{
+	upspeed = speed_in;
 }

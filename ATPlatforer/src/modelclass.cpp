@@ -558,8 +558,8 @@ void ModelClass::CalculateAABB(std::vector<XMFLOAT3> boundingBoxVerts,
 	}
 
 	//Store Bounding Box's min and max vertices
-	boundingBoxMin = XMVectorSet(minVertex.x, minVertex.y, minVertex.z, 0.0f);
-	boundingBoxMax = XMVectorSet(maxVertex.x, maxVertex.y, maxVertex.z, 0.0f);
+	boundingBoxMin = XMVectorSet(minVertex.x -0.5f, minVertex.y - 0.5f, minVertex.z -0.5f, 0.0f);
+	boundingBoxMax = XMVectorSet(maxVertex.x + 0.5f, maxVertex.y + 0.5f, maxVertex.z + 0.5f, 0.0f);
 }
 
 bool ModelClass::BoundingBoxCollision(XMVECTOR& firstObjBoundingBoxMinVertex,

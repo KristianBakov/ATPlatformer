@@ -82,7 +82,7 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 		// Initialize the model object
 		//result = m_Model[i]->Initialize(m_Direct3D->GetDevice(), m_Direct3D->GetDeviceContext(), (char*)"../src/stone01.tga");
 
-	result = m_Player->Initialize(m_Direct3D->GetDevice(), m_Direct3D->GetDeviceContext(), (char*)"../src/cube.txt", (char*)"../src/stone01.tga");
+	result = m_Player->Initialize(m_Direct3D->GetDevice(), m_Direct3D->GetDeviceContext(), (char*)"../src/cube.txt", (char*)"../src/grey.tga");
 	if (!result)
 	{
 		MessageBox(hwnd, L"Could not initialize the model object.", L"Error", MB_OK);
@@ -99,28 +99,35 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 	//	}
 	//}
 
-	result = m_Model[0]->Initialize(m_Direct3D->GetDevice(), m_Direct3D->GetDeviceContext(), (char*)"../src/cube.txt", (char*)"../src/stone01.tga");
+	result = m_Model[0]->Initialize(m_Direct3D->GetDevice(), m_Direct3D->GetDeviceContext(), (char*)"../src/cube.txt", (char*)"../src/green.tga");
 	if (!result)
 	{
 		MessageBox(hwnd, L"Could not initialize the model object.", L"Error", MB_OK);
 		return false;
 	}
 
-	result = m_Model[1]->Initialize(m_Direct3D->GetDevice(), m_Direct3D->GetDeviceContext(), (char*)"../src/cube.txt", (char*)"../src/crate.tga");
+	result = m_Model[1]->Initialize(m_Direct3D->GetDevice(), m_Direct3D->GetDeviceContext(), (char*)"../src/cube.txt", (char*)"../src/grey.tga");
 	if (!result)
 	{
 		MessageBox(hwnd, L"Could not initialize the model object.", L"Error", MB_OK);
 		return false;
 	}
 
-	result = m_Model[2]->Initialize(m_Direct3D->GetDevice(), m_Direct3D->GetDeviceContext(), (char*)"../src/cube.txt", (char*)"../src/crate.tga");
+	result = m_Model[2]->Initialize(m_Direct3D->GetDevice(), m_Direct3D->GetDeviceContext(), (char*)"../src/cube.txt", (char*)"../src/grey.tga");
 	if (!result)
 	{
 		MessageBox(hwnd, L"Could not initialize the model object.", L"Error", MB_OK);
 		return false;
 	}
 
-	result = m_Model[3]->Initialize(m_Direct3D->GetDevice(), m_Direct3D->GetDeviceContext(), (char*)"../src/cube.txt", (char*)"../src/crate.tga");
+	result = m_Model[3]->Initialize(m_Direct3D->GetDevice(), m_Direct3D->GetDeviceContext(), (char*)"../src/cube.txt", (char*)"../src/red.tga");
+	if (!result)
+	{
+		MessageBox(hwnd, L"Could not initialize the model object.", L"Error", MB_OK);
+		return false;
+	}
+
+	result = m_Model[4]->Initialize(m_Direct3D->GetDevice(), m_Direct3D->GetDeviceContext(), (char*)"../src/button.txt", (char*)"../src/button.tga");
 	if (!result)
 	{
 		MessageBox(hwnd, L"Could not initialize the model object.", L"Error", MB_OK);
@@ -131,6 +138,7 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 	m_Model[1]->CreateBoundingVolumes(m_Model[1]->VertPosArray, m_Model[1]->BoundingBoxVertPosArray, m_Model[1]->BoundingSphere, m_Model[1]->CenterOffset);
 	m_Model[2]->CreateBoundingVolumes(m_Model[2]->VertPosArray, m_Model[2]->BoundingBoxVertPosArray, m_Model[2]->BoundingSphere, m_Model[2]->CenterOffset);
 	m_Model[3]->CreateBoundingVolumes(m_Model[3]->VertPosArray, m_Model[3]->BoundingBoxVertPosArray, m_Model[3]->BoundingSphere, m_Model[3]->CenterOffset);
+	m_Model[3]->isbutton = true;
 
 	//// Create the texture shader object.
 	//m_TextureShader = new TextureShaderClass;
@@ -262,44 +270,44 @@ bool GraphicsClass::Frame()
 	
 	if (GetKeyState('W') & 0x8000)
 	{
-		m_Camera->SetSpeedForward(10 * m_delta);
+		m_Camera->SetSpeedForward(20 * m_delta);
 	}
 	if (GetKeyState('A') & 0x8000)
 	{
-		m_Camera->SetSpeedRight(-10 * m_delta);
+		m_Camera->SetSpeedRight(-20 * m_delta);
 	}
 	if (GetKeyState('D') & 0x8000)
 	{
-		m_Camera->SetSpeedRight(10 * m_delta);
+		m_Camera->SetSpeedRight(20 * m_delta);
 	}
 	if (GetKeyState('S') & 0x8000)
 	{
-		m_Camera->SetSpeedForward(-10 * m_delta);
+		m_Camera->SetSpeedForward(-20 * m_delta);
 	}
-	if (GetKeyState('R') & 0x8000)
-	{
-		m_Camera->SetSpeedUp(10 * m_delta);
-	}
-	if (GetKeyState('F') & 0x8000)
+	//if (GetKeyState('R') & 0x8000)
+	//{
+	//	m_Camera->SetSpeedUp(20 * m_delta);
+	//}
+	if (GetKeyState(VK_SPACE) & 0x8000)
 	{
 		//m_Camera->SetPosition(m_Camera->GetPosition().x, m_Camera->GetPosition().y - 10 * m_delta, m_Camera->GetPosition().z);
-		m_Camera->SetSpeedUp(-10 * m_delta);
+		m_Camera->SetSpeedUp(20 * m_delta);
 	}
 	if (GetKeyState(VK_UP) & 0x8000)
 	{
-		cameraXrot = m_Camera->GetRotation().x - 60 * m_delta;
+		cameraXrot = m_Camera->GetRotation().x - 80 * m_delta;
 	}
 	if (GetKeyState(VK_DOWN) & 0x8000)
 	{
-		cameraXrot = m_Camera->GetRotation().x + 60 * m_delta;
+		cameraXrot = m_Camera->GetRotation().x + 80 * m_delta;
 	}
 	if (GetKeyState(VK_LEFT) & 0x8000)
 	{
-		cameraYrot = m_Camera->GetRotation().y - 60 * m_delta;
+		cameraYrot = m_Camera->GetRotation().y - 80 * m_delta;
 	}
 	if (GetKeyState(VK_RIGHT) & 0x8000)
 	{
-		cameraYrot = m_Camera->GetRotation().y + 60 * m_delta;
+		cameraYrot = m_Camera->GetRotation().y + 80 * m_delta;
 	}
 
 	for (int i = 0; i < models; i++)
@@ -350,6 +358,7 @@ bool GraphicsClass::Render(float rotation)
 	m_Model[1]->AABBWorld = XMMatrixTranslation(0, 0, 3);
 	m_Model[2]->AABBWorld = XMMatrixTranslation(0, 0, 6);
 	m_Model[3]->AABBWorld = XMMatrixTranslation(0, 0, 15);
+	m_Model[4]->AABBWorld = XMMatrixTranslation(0, 1, 15);
 	m_Player->AABBWorld = XMMatrixTranslation(m_Camera->GetPosition().x, m_Camera->GetPosition().y, m_Camera->GetPosition().z);
 
 	//D3D11_MAPPED_SUBRESOURCE resource;
@@ -365,6 +374,7 @@ bool GraphicsClass::Render(float rotation)
 	m_Model[2]->CalculateAABB(m_Model[2]->BoundingBoxVertPosArray, m_Model[2]->AABBWorld, m_Model[2]->BoundingBoxMinVertex, m_Model[2]->BoundingBoxMaxVertex);
 
 	m_Model[3]->CalculateAABB(m_Model[3]->BoundingBoxVertPosArray, m_Model[3]->AABBWorld, m_Model[3]->BoundingBoxMinVertex, m_Model[3]->BoundingBoxMaxVertex);
+
 
 	for (int i = 0; i < models; i++)
 	{

@@ -1,2 +1,3 @@
 ﻿  graphicsclass.cpp
+D:\ATTaskNew\ATPlatforer\src\graphicsclass.cpp(273,33): warning C4305: 'argument': truncation from 'double' to 'float'
   ATPlatforer.vcxproj -> D:\ATTaskNew\ATPlatforer\x64\Debug\ATPlatforer.exe

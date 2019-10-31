@@ -96,6 +96,7 @@ public:
 	XMVECTOR Dir;
 
 	bool iscollided = false;
+	bool isbutton = false;
 
 	D3D11_SUBRESOURCE_DATA vertexData, instanceData;
 

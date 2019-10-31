@@ -82,15 +82,16 @@ int ModelClass::GetVertexCount()
 	return m_vertexCount;
 }
 
+size_t ModelClass::GetVertexBufferSize()
+{
+	return sizeof(VertexType) * m_vertexCount;
+}
+
 
 int ModelClass::GetInstanceCount()
 {
 	return m_instanceCount;
 }
-
-
-
-
 
 int ModelClass::GetIndexCount()
 {
@@ -109,10 +110,10 @@ ID3D11ShaderResourceView* ModelClass::GetTexture()
 
 bool ModelClass::InitializeBuffers(ID3D11Device* device)
 {
-	VertexType* vertices;
+	//VertexType* vertices;
 	InstanceType* instances;
-	D3D11_BUFFER_DESC vertexBufferDesc, instanceBufferDesc;
-	D3D11_SUBRESOURCE_DATA vertexData, instanceData;
+	//D3D11_BUFFER_DESC vertexBufferDesc, instanceBufferDesc;
+	//D3D11_SUBRESOURCE_DATA vertexData, instanceData;
 	//unsigned long* indices;
 	//D3D11_BUFFER_DESC vertexBufferDesc, indexBufferDesc;
 	//D3D11_SUBRESOURCE_DATA vertexData, indexData;
@@ -148,7 +149,6 @@ bool ModelClass::InitializeBuffers(ID3D11Device* device)
 
 		//indices[i] = i;
 	}
-
 	//// Load the vertex array with data.
 	//vertices[0].position = XMFLOAT3(-1.0f,  1.0f, - 1.0f);  // Bottom left.
 	//vertices[0].texture = XMFLOAT2(0.0f, 1.0f);
@@ -299,10 +299,10 @@ bool ModelClass::InitializeBuffers(ID3D11Device* device)
 
 
 	// Set up the description of the static vertex buffer.
-    vertexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
+    vertexBufferDesc.Usage = D3D11_USAGE_DYNAMIC;
     vertexBufferDesc.ByteWidth = sizeof(VertexType) * m_vertexCount;
     vertexBufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
-    vertexBufferDesc.CPUAccessFlags = 0;
+    vertexBufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
     vertexBufferDesc.MiscFlags = 0;
 	vertexBufferDesc.StructureByteStride = 0;
 
@@ -317,6 +317,8 @@ bool ModelClass::InitializeBuffers(ID3D11Device* device)
 	{
 		return false;
 	}
+
+	
 
 	//// Set up the description of the static index buffer.
  //   indexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
@@ -344,7 +346,7 @@ bool ModelClass::InitializeBuffers(ID3D11Device* device)
 	//indices = 0;
 
 	// Set the number of instances in the array.
-	m_instanceCount = 5;
+	m_instanceCount = 10000;
 
 	// Create the instance array.
 	instances = new InstanceType[m_instanceCount];
@@ -353,7 +355,7 @@ bool ModelClass::InitializeBuffers(ID3D11Device* device)
 		return false;
 	}
 
-
+	AABBWorld = XMMatrixIdentity();
 
 	//for (int i = 0; i < 100; i++)
 	//{
@@ -363,10 +365,10 @@ bool ModelClass::InitializeBuffers(ID3D11Device* device)
 	//		instances[instance].position = XMFLOAT3(i * 2, 0.0f , j * 2);
 	//	}
 	//}
-	for (int i = 0; i < m_instanceCount; i++)
-	{
-		instances[i].position = XMFLOAT3(i * 10, 0.0f, 0.0f);
-	}
+	//for (int i = 0; i < m_instanceCount; i++)
+	//{
+	//	instances[i].position = XMFLOAT3(i * 10, 0.0f, 0.0f);
+	//}
 		//instances[0].position = XMFLOAT3(0, 0, 0);
 		//instances[1].position = XMFLOAT3(2, 2, 2);
 		//instances[2].position = XMFLOAT3(3, 3, 3);
@@ -374,28 +376,23 @@ bool ModelClass::InitializeBuffers(ID3D11Device* device)
 		//instances[4].position = XMFLOAT3(5, 5, 5);
 	//	instances[5].position = XMFLOAT3(6, 6, 6);
 
-	//for (int i = 0; i < 10; i++)
-	//{
-	//	for (int j = 0; j < 10; j++)
-	//	{
-	//		for (int k = 0; k < 10; k++)
-	//		{
-	//			int instance = i * 100 + j * 10 + k;
-	//			instances[instance].position = XMFLOAT3(i * 10, j * 10, k * 10);
-	//		}
-	//	}
-	//}
-	//// Load the instance array with data.
-	//instances[0].position = XMFLOAT3(-1.5f, -1.5f, 5.0f);
-	//instances[1].position = XMFLOAT3(-1.5f, 1.5f, 5.0f);
-	//instances[2].position = XMFLOAT3(1.5f, -1.5f, 5.0f);
-	//instances[3].position = XMFLOAT3(1.5f, 1.5f, 5.0f);
+	for (int i = 0; i < 10; i++)
+	{
+		for (int j = 0; j < 10; j++)
+		{
+			for (int k = 0; k < 10; k++)
+			{
+				int instance = i * 100 + j * 10 + k;
+				instances[instance].position = XMFLOAT3(i * 10, j * 10, k * 10);
+			}
+		}
+	}
 
 	// Set up the description of the instance buffer.
-	instanceBufferDesc.Usage = D3D11_USAGE_DYNAMIC;
+	instanceBufferDesc.Usage = D3D11_USAGE_DEFAULT;
 	instanceBufferDesc.ByteWidth = sizeof(InstanceType) * m_instanceCount;
 	instanceBufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
-	instanceBufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+	instanceBufferDesc.CPUAccessFlags = 0;
 	instanceBufferDesc.MiscFlags = 0;
 	instanceBufferDesc.StructureByteStride = 0;
 
@@ -476,6 +473,125 @@ bool ModelClass::LoadModel(char* filename)
 	fin.close();
 
 	return true;
+}
+
+void ModelClass::CreateBoundingVolumes(std::vector<XMFLOAT3>& vertPosArray,
+	std::vector<XMFLOAT3>& boundingBoxVerts,
+	float& boundingSphere,
+	XMVECTOR& objectCenterOffset)
+{
+	XMFLOAT3 minVertex = XMFLOAT3(FLT_MAX, FLT_MAX, FLT_MAX);
+	XMFLOAT3 maxVertex = XMFLOAT3(-FLT_MAX, -FLT_MAX, -FLT_MAX);
+
+	for (int i = 0; i < m_vertexCount; i++)
+	{
+		vertPosArray.push_back(XMFLOAT3(m_model[i].x, m_model[i].y, m_model[i].z));
+	}
+
+	for (UINT i = 0; i < vertPosArray.size(); i++)
+	{
+		// The minVertex and maxVertex will most likely not be actual vertices in the model, but vertices
+		// that use the smallest and largest x, y, and z values from the model to be sure ALL vertices are
+		// covered by the bounding volume
+
+		//Get the smallest vertex 
+		minVertex.x = min(minVertex.x, vertPosArray[i].x);    // Find smallest x value in model
+		minVertex.y = min(minVertex.y, vertPosArray[i].y);    // Find smallest y value in model
+		minVertex.z = min(minVertex.z, vertPosArray[i].z);    // Find smallest z value in model
+
+		//Get the largest vertex 
+		maxVertex.x = max(maxVertex.x, vertPosArray[i].x);    // Find largest x value in model
+		maxVertex.y = max(maxVertex.y, vertPosArray[i].y);    // Find largest y value in model
+		maxVertex.z = max(maxVertex.z, vertPosArray[i].z);    // Find largest z value in model
+	}
+
+	// Compute distance between maxVertex and minVertex
+	float distX = (maxVertex.x - minVertex.x) / 2.0f;
+	float distY = (maxVertex.y - minVertex.y) / 2.0f;
+	float distZ = (maxVertex.z - minVertex.z) / 2.0f;
+
+	// Now store the distance between (0, 0, 0) in model space to the models real center
+	objectCenterOffset = XMVectorSet(maxVertex.x - distX, maxVertex.y - distY, maxVertex.z - distZ, 0.0f);
+
+	// Compute bounding sphere (distance between min and max bounding box vertices)
+	// boundingSphere = sqrt(distX*distX + distY*distY + distZ*distZ) / 2.0f;
+	boundingSphere = XMVectorGetX(XMVector3Length(XMVectorSet(distX, distY, distZ, 0.0f)));
+
+	// Create bounding box    
+	// Front Vertices
+	boundingBoxVerts.push_back(XMFLOAT3(minVertex.x, minVertex.y, minVertex.z));
+	boundingBoxVerts.push_back(XMFLOAT3(minVertex.x, maxVertex.y, minVertex.z));
+	boundingBoxVerts.push_back(XMFLOAT3(maxVertex.x, maxVertex.y, minVertex.z));
+	boundingBoxVerts.push_back(XMFLOAT3(maxVertex.x, minVertex.y, minVertex.z));
+
+	// Back Vertices
+	boundingBoxVerts.push_back(XMFLOAT3(minVertex.x, minVertex.y, maxVertex.z));
+	boundingBoxVerts.push_back(XMFLOAT3(maxVertex.x, minVertex.y, maxVertex.z));
+	boundingBoxVerts.push_back(XMFLOAT3(maxVertex.x, maxVertex.y, maxVertex.z));
+	boundingBoxVerts.push_back(XMFLOAT3(minVertex.x, maxVertex.y, maxVertex.z));
+}
+
+void ModelClass::CalculateAABB(std::vector<XMFLOAT3> boundingBoxVerts,
+	XMMATRIX& worldSpace,
+	XMVECTOR& boundingBoxMin,
+	XMVECTOR& boundingBoxMax)
+{
+	XMFLOAT3 minVertex = XMFLOAT3(FLT_MAX, FLT_MAX, FLT_MAX);
+	XMFLOAT3 maxVertex = XMFLOAT3(-FLT_MAX, -FLT_MAX, -FLT_MAX);
+
+	//Loop through the 8 vertices describing the bounding box
+	for (UINT i = 0; i < 8; i++)
+	{
+		//Transform the bounding boxes vertices to the objects world space
+		XMVECTOR Vert = XMVectorSet(boundingBoxVerts[i].x, boundingBoxVerts[i].y, boundingBoxVerts[i].z, 0.0f);
+		Vert = XMVector3TransformCoord(Vert, worldSpace);
+
+		//Get the smallest vertex 
+		minVertex.x = min(minVertex.x, XMVectorGetX(Vert));    // Find smallest x value in model
+		minVertex.y = min(minVertex.y, XMVectorGetY(Vert));    // Find smallest y value in model
+		minVertex.z = min(minVertex.z, XMVectorGetZ(Vert));    // Find smallest z value in model
+
+		//Get the largest vertex 
+		maxVertex.x = max(maxVertex.x, XMVectorGetX(Vert));    // Find largest x value in model
+		maxVertex.y = max(maxVertex.y, XMVectorGetY(Vert));    // Find largest y value in model
+		maxVertex.z = max(maxVertex.z, XMVectorGetZ(Vert));    // Find largest z value in model
+	}
+
+	//Store Bounding Box's min and max vertices
+	boundingBoxMin = XMVectorSet(minVertex.x, minVertex.y, minVertex.z, 0.0f);
+	boundingBoxMax = XMVectorSet(maxVertex.x, maxVertex.y, maxVertex.z, 0.0f);
+}
+
+bool ModelClass::BoundingBoxCollision(XMVECTOR& firstObjBoundingBoxMinVertex,
+	XMVECTOR& firstObjBoundingBoxMaxVertex,
+	XMMATRIX& firstObjWorldSpace,
+	XMVECTOR& secondObjBoundingBoxMinVertex,
+	XMVECTOR& secondObjBoundingBoxMaxVertex,
+	XMMATRIX& secondObjWorldSpace)
+{
+	//Is obj1's max X greater than obj2's min X? If not, obj1 is to the LEFT of obj2
+	if (XMVectorGetX(firstObjBoundingBoxMaxVertex) > XMVectorGetX(secondObjBoundingBoxMinVertex))
+
+		//Is obj1's min X less than obj2's max X? If not, obj1 is to the RIGHT of obj2
+		if (XMVectorGetX(firstObjBoundingBoxMinVertex) < XMVectorGetX(secondObjBoundingBoxMaxVertex))
+
+			//Is obj1's max Y greater than obj2's min Y? If not, obj1 is UNDER obj2
+			if (XMVectorGetY(firstObjBoundingBoxMaxVertex) > XMVectorGetY(secondObjBoundingBoxMinVertex))
+
+				//Is obj1's min Y less than obj2's max Y? If not, obj1 is ABOVE obj2
+				if (XMVectorGetY(firstObjBoundingBoxMinVertex) < XMVectorGetY(secondObjBoundingBoxMaxVertex))
+
+					//Is obj1's max Z greater than obj2's min Z? If not, obj1 is IN FRONT OF obj2
+					if (XMVectorGetZ(firstObjBoundingBoxMaxVertex) > XMVectorGetZ(secondObjBoundingBoxMinVertex))
+
+						//Is obj1's min Z less than obj2's max Z? If not, obj1 is BEHIND obj2
+						if (XMVectorGetZ(firstObjBoundingBoxMinVertex) < XMVectorGetZ(secondObjBoundingBoxMaxVertex))
+
+							//If we've made it this far, then the two bounding boxes are colliding
+							return true;
+
+	//If the two bounding boxes are not colliding, then return false
+	return false;
 }
 
 void ModelClass::ReleaseModel()

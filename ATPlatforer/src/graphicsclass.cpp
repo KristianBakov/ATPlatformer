@@ -73,7 +73,7 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 		
 		// Initialize the model object
 		//result = m_Model[i]->Initialize(m_Direct3D->GetDevice(), m_Direct3D->GetDeviceContext(), (char*)"../src/stone01.tga");
-	result = m_Model[0]->Initialize(m_Direct3D->GetDevice(), m_Direct3D->GetDeviceContext(), (char*)"../src/plane.txt", (char*)"../src/stone01.tga");
+	result = m_Model[0]->Initialize(m_Direct3D->GetDevice(), m_Direct3D->GetDeviceContext(), (char*)"../src/cube.txt", (char*)"../src/stone01.tga");
 	if (!result)
 	{
 		MessageBox(hwnd, L"Could not initialize the model object.", L"Error", MB_OK);
@@ -86,6 +86,9 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 		MessageBox(hwnd, L"Could not initialize the model object.", L"Error", MB_OK);
 		return false;
 	}
+
+	m_Model[0]->CreateBoundingVolumes(m_Model[0]->VertPosArray, m_Model[0]->BoundingBoxVertPosArray, m_Model[0]->BoundingSphere, m_Model[0]->CenterOffset);
+	m_Model[1]->CreateBoundingVolumes(m_Model[1]->VertPosArray, m_Model[1]->BoundingBoxVertPosArray, m_Model[1]->BoundingSphere, m_Model[1]->CenterOffset);
 
 	//// Create the texture shader object.
 	//m_TextureShader = new TextureShaderClass;
@@ -265,7 +268,8 @@ bool GraphicsClass::Render(float rotation)
 {
 	XMMATRIX worldMatrix, viewMatrix, projectionMatrix;
 	bool result;
-	m_Model[1]->SetInstanceCount(2);
+	m_Model[0]->SetInstanceCount(1);
+	m_Model[1]->SetInstanceCount(1000);
 
 	// Clear the buffers to begin the scene.
 	m_Direct3D->BeginScene(0.0f, 0.2f, 0.0f, 1.0f);
@@ -278,19 +282,48 @@ bool GraphicsClass::Render(float rotation)
 	m_Camera->GetViewMatrix(viewMatrix);
 	m_Direct3D->GetProjectionMatrix(projectionMatrix);
 
+	m_Model[0]->AABBWorld = XMMatrixTranslation(-10,0,0);
+
+	//D3D11_MAPPED_SUBRESOURCE resource;
+	//m_Direct3D->GetDeviceContext()->Map(m_Model[0]->m_vertexBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &resource);
+	//memcpy(resource.pData, &m_Model[0]->vertexData, m_Model[0]->GetVertexBufferSize());
+	//m_Direct3D->GetDeviceContext()->Unmap(m_Model[0]->m_vertexBuffer, 0);
+
+	m_Model[0]->CalculateAABB(m_Model[0]->BoundingBoxVertPosArray, worldMatrix, m_Model[0]->BoundingBoxMinVertex, m_Model[0]->BoundingBoxMaxVertex);
+	m_Model[1]->CalculateAABB(m_Model[1]->BoundingBoxVertPosArray, worldMatrix, m_Model[1]->BoundingBoxMinVertex, m_Model[1]->BoundingBoxMaxVertex);
+	if (m_Model[0]->BoundingBoxCollision(m_Model[0]->BoundingBoxMinVertex, m_Model[0]->BoundingBoxMaxVertex, m_Model[1]->AABBWorld,
+		m_Model[1]->BoundingBoxMinVertex, m_Model[1]->BoundingBoxMaxVertex, m_Model[1]->AABBWorld))
+	{
+		printf("collision");
+		//worldMatrix = XMMatrixRotationY(rotation);
+
+
+	}
+	else
+	{
+		printf("no collison");
+	}
+
 	// Rotate the world matrix by the rotation value so that the cube will spin.
 	//worldMatrix = XMMatrixRotationY(rotation);
 
 	// Put the model vertex and index buffers on the graphics pipeline to prepare them for drawing.
+
+	result = m_LightShader->Render(m_Direct3D->GetDeviceContext(), m_Model[0]->GetVertexCount(), m_Model[0]->GetInstanceCount(), m_Model[0]->AABBWorld, viewMatrix,
+		projectionMatrix, m_Model[0]->GetTexture(), m_Light->GetDirection(), m_Light->GetAmbientColor(), m_Light->GetDiffuseColor());
+
+	result = m_LightShader->Render(m_Direct3D->GetDeviceContext(), m_Model[1]->GetVertexCount(), m_Model[1]->GetInstanceCount(), worldMatrix, viewMatrix,
+		projectionMatrix, m_Model[1]->GetTexture(), m_Light->GetDirection(), m_Light->GetAmbientColor(), m_Light->GetDiffuseColor());
 	for (int i = 0; i < models; i++)
 	{
 		m_Model[i]->Render(m_Direct3D->GetDeviceContext());
-		//worldMatrix = XMMatrixTranslation(0.0f, 0.0f, 5.0f * i) * XMMatrixRotationY(rotation);
+	//	//worldMatrix = XMMatrixTranslation(0.0f, 0.0f, 5.0f * i) * XMMatrixRotationY(rotation);
 
-		result = m_LightShader->Render(m_Direct3D->GetDeviceContext(), m_Model[i]->GetVertexCount(), m_Model[i]->GetInstanceCount(), worldMatrix, viewMatrix,
+		result = m_LightShader->Render(m_Direct3D->GetDeviceContext(), m_Model[i]->GetVertexCount(), m_Model[i]->GetInstanceCount(), m_Model[i]->AABBWorld, viewMatrix,
 			projectionMatrix, m_Model[i]->GetTexture(), m_Light->GetDirection(), m_Light->GetAmbientColor(), m_Light->GetDiffuseColor());
 
 	}
+
 	if (!result)
 	{
 		return false;

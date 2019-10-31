@@ -1,5 +1,2 @@
-﻿  modelclass.cpp
-D:\ATTaskNew\ATPlatforer\src\modelclass.cpp(386,63): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-D:\ATTaskNew\ATPlatforer\src\modelclass.cpp(386,55): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-D:\ATTaskNew\ATPlatforer\src\modelclass.cpp(386,47): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+﻿  graphicsclass.cpp
   ATPlatforer.vcxproj -> D:\ATTaskNew\ATPlatforer\x64\Debug\ATPlatforer.exe

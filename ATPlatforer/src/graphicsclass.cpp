@@ -289,8 +289,8 @@ bool GraphicsClass::Render(float rotation)
 	//memcpy(resource.pData, &m_Model[0]->vertexData, m_Model[0]->GetVertexBufferSize());
 	//m_Direct3D->GetDeviceContext()->Unmap(m_Model[0]->m_vertexBuffer, 0);
 
-	m_Model[0]->CalculateAABB(m_Model[0]->BoundingBoxVertPosArray, worldMatrix, m_Model[0]->BoundingBoxMinVertex, m_Model[0]->BoundingBoxMaxVertex);
-	m_Model[1]->CalculateAABB(m_Model[1]->BoundingBoxVertPosArray, worldMatrix, m_Model[1]->BoundingBoxMinVertex, m_Model[1]->BoundingBoxMaxVertex);
+	m_Model[0]->CalculateAABB(m_Model[0]->BoundingBoxVertPosArray, m_Model[0]->AABBWorld, m_Model[0]->BoundingBoxMinVertex, m_Model[0]->BoundingBoxMaxVertex);
+	m_Model[1]->CalculateAABB(m_Model[1]->BoundingBoxVertPosArray, m_Model[1]->AABBWorld, m_Model[1]->BoundingBoxMinVertex, m_Model[1]->BoundingBoxMaxVertex);
 	if (m_Model[0]->BoundingBoxCollision(m_Model[0]->BoundingBoxMinVertex, m_Model[0]->BoundingBoxMaxVertex, m_Model[1]->AABBWorld,
 		m_Model[1]->BoundingBoxMinVertex, m_Model[1]->BoundingBoxMaxVertex, m_Model[1]->AABBWorld))
 	{
@@ -309,11 +309,11 @@ bool GraphicsClass::Render(float rotation)
 
 	// Put the model vertex and index buffers on the graphics pipeline to prepare them for drawing.
 
-	result = m_LightShader->Render(m_Direct3D->GetDeviceContext(), m_Model[0]->GetVertexCount(), m_Model[0]->GetInstanceCount(), m_Model[0]->AABBWorld, viewMatrix,
-		projectionMatrix, m_Model[0]->GetTexture(), m_Light->GetDirection(), m_Light->GetAmbientColor(), m_Light->GetDiffuseColor());
+	//result = m_LightShader->Render(m_Direct3D->GetDeviceContext(), m_Model[0]->GetVertexCount(), m_Model[0]->GetInstanceCount(), m_Model[0]->AABBWorld, viewMatrix,
+	//	projectionMatrix, m_Model[0]->GetTexture(), m_Light->GetDirection(), m_Light->GetAmbientColor(), m_Light->GetDiffuseColor());
 
-	result = m_LightShader->Render(m_Direct3D->GetDeviceContext(), m_Model[1]->GetVertexCount(), m_Model[1]->GetInstanceCount(), worldMatrix, viewMatrix,
-		projectionMatrix, m_Model[1]->GetTexture(), m_Light->GetDirection(), m_Light->GetAmbientColor(), m_Light->GetDiffuseColor());
+	//result = m_LightShader->Render(m_Direct3D->GetDeviceContext(), m_Model[1]->GetVertexCount(), m_Model[1]->GetInstanceCount(), worldMatrix, viewMatrix,
+	//	projectionMatrix, m_Model[1]->GetTexture(), m_Light->GetDirection(), m_Light->GetAmbientColor(), m_Light->GetDiffuseColor());
 	for (int i = 0; i < models; i++)
 	{
 		m_Model[i]->Render(m_Direct3D->GetDeviceContext());

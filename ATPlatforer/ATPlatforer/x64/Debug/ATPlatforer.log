@@ -1,3 +1,4 @@
 ﻿  graphicsclass.cpp
-D:\ATTaskNew\ATPlatforer\src\graphicsclass.cpp(273,33): warning C4305: 'argument': truncation from 'double' to 'float'
+  systemclass.cpp
+  Generating Code...
   ATPlatforer.vcxproj -> D:\ATTaskNew\ATPlatforer\x64\Debug\ATPlatforer.exe

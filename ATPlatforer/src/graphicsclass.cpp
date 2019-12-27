@@ -78,7 +78,7 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 	{
 		return false;
 	}
-		
+
 		// Initialize the model object
 		//result = m_Model[i]->Initialize(m_Direct3D->GetDevice(), m_Direct3D->GetDeviceContext(), (char*)"../src/stone01.tga");
 
@@ -89,6 +89,7 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 		return false;
 	}
 	m_Player->CreateBoundingVolumes(m_Player->VertPosArray, m_Player->BoundingBoxVertPosArray, m_Player->BoundingSphere, m_Player->CenterOffset);
+
 	//for (int i = 0; i < models; i++)
 	//{
 	//	result = m_Model[i]->Initialize(m_Direct3D->GetDevice(), m_Direct3D->GetDeviceContext(), (char*)"../src/cube.txt", (char*)"../src/stone01.tga");
@@ -133,12 +134,25 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 		MessageBox(hwnd, L"Could not initialize the model object.", L"Error", MB_OK);
 		return false;
 	}
+	for (int i = 5; i < 21; i++)
+	{
+		result = m_Model[i]->Initialize(m_Direct3D->GetDevice(), m_Direct3D->GetDeviceContext(), (char*)"../src/cube.txt", (char*)"../src/grey.tga");
+		if (!result)
+		{
+			MessageBox(hwnd, L"Could not initialize the model object.", L"Error", MB_OK);
+			return false;
+		}
+	}
 
 	m_Model[0]->CreateBoundingVolumes(m_Model[0]->VertPosArray, m_Model[0]->BoundingBoxVertPosArray, m_Model[0]->BoundingSphere, m_Model[0]->CenterOffset);
 	m_Model[1]->CreateBoundingVolumes(m_Model[1]->VertPosArray, m_Model[1]->BoundingBoxVertPosArray, m_Model[1]->BoundingSphere, m_Model[1]->CenterOffset);
 	m_Model[2]->CreateBoundingVolumes(m_Model[2]->VertPosArray, m_Model[2]->BoundingBoxVertPosArray, m_Model[2]->BoundingSphere, m_Model[2]->CenterOffset);
 	m_Model[3]->CreateBoundingVolumes(m_Model[3]->VertPosArray, m_Model[3]->BoundingBoxVertPosArray, m_Model[3]->BoundingSphere, m_Model[3]->CenterOffset);
 	m_Model[3]->isbutton = true;
+	for (int i = 5; i < 21; i++)
+	{
+		m_Model[i]->CreateBoundingVolumes(m_Model[i]->VertPosArray, m_Model[i]->BoundingBoxVertPosArray, m_Model[i]->BoundingSphere, m_Model[i]->CenterOffset);
+	}
 
 	//// Create the texture shader object.
 	//m_TextureShader = new TextureShaderClass;
@@ -291,23 +305,23 @@ bool GraphicsClass::Frame()
 	if (GetKeyState(VK_SPACE) & 0x8000)
 	{
 		//m_Camera->SetPosition(m_Camera->GetPosition().x, m_Camera->GetPosition().y - 10 * m_delta, m_Camera->GetPosition().z);
-		m_Camera->SetSpeedUp(20 * m_delta);
+		m_Camera->SetSpeedUp(120 * m_delta);
 	}
 	if (GetKeyState(VK_UP) & 0x8000)
 	{
-		cameraXrot = m_Camera->GetRotation().x - 80 * m_delta;
+		cameraXrot = m_Camera->GetRotation().x - 120 * m_delta;
 	}
 	if (GetKeyState(VK_DOWN) & 0x8000)
 	{
-		cameraXrot = m_Camera->GetRotation().x + 80 * m_delta;
+		cameraXrot = m_Camera->GetRotation().x + 120 * m_delta;
 	}
 	if (GetKeyState(VK_LEFT) & 0x8000)
 	{
-		cameraYrot = m_Camera->GetRotation().y - 80 * m_delta;
+		cameraYrot = m_Camera->GetRotation().y - 120 * m_delta;
 	}
 	if (GetKeyState(VK_RIGHT) & 0x8000)
 	{
-		cameraYrot = m_Camera->GetRotation().y + 80 * m_delta;
+		cameraYrot = m_Camera->GetRotation().y + 120 * m_delta;
 	}
 
 	for (int i = 0; i < models; i++)
@@ -340,9 +354,10 @@ bool GraphicsClass::Render(float rotation)
 {
 	XMMATRIX worldMatrix, viewMatrix, projectionMatrix;
 	bool result;
-	m_Model[0]->SetInstanceCount(1);
-	m_Model[1]->SetInstanceCount(1);
-	m_Model[2]->SetInstanceCount(1);
+	for (int i = 0; i < models; i++)
+	{
+		m_Model[i]->SetInstanceCount(1);
+	}
 
 	// Clear the buffers to begin the scene.
 	m_Direct3D->BeginScene(0.0f, 0.2f, 0.0f, 1.0f);
@@ -359,6 +374,16 @@ bool GraphicsClass::Render(float rotation)
 	m_Model[2]->AABBWorld = XMMatrixTranslation(0, 0, 6);
 	m_Model[3]->AABBWorld = XMMatrixTranslation(0, 0, 15);
 	m_Model[4]->AABBWorld = XMMatrixTranslation(0, 1, 15);
+
+	m_Model[5]->AABBWorld = XMMatrixTranslation(0, 0, 20);
+	m_Model[6]->AABBWorld = XMMatrixTranslation(2, 0, 20);
+	m_Model[7]->AABBWorld = XMMatrixTranslation(-2, 0, 20);
+	m_Model[8]->AABBWorld = XMMatrixTranslation(0, 0, 22);
+	m_Model[9]->AABBWorld = XMMatrixTranslation(2, 0, 22);
+	m_Model[10]->AABBWorld = XMMatrixTranslation(-2, 0, 22);
+	m_Model[11]->AABBWorld = XMMatrixTranslation(0, 0, 24);
+	m_Model[12]->AABBWorld = XMMatrixTranslation(2, 0, 24);
+	m_Model[13]->AABBWorld = XMMatrixTranslation(-2, 0, 24);
 	m_Player->AABBWorld = XMMatrixTranslation(m_Camera->GetPosition().x, m_Camera->GetPosition().y, m_Camera->GetPosition().z);
 
 	//D3D11_MAPPED_SUBRESOURCE resource;
@@ -367,6 +392,7 @@ bool GraphicsClass::Render(float rotation)
 	//m_Direct3D->GetDeviceContext()->Unmap(m_Model[0]->m_vertexBuffer, 0);
 
 	m_Player->CalculateAABB(m_Player->BoundingBoxVertPosArray, m_Player->AABBWorld, m_Player->BoundingBoxMinVertex, m_Player->BoundingBoxMaxVertex);
+
 	m_Model[0]->CalculateAABB(m_Model[0]->BoundingBoxVertPosArray, m_Model[0]->AABBWorld, m_Model[0]->BoundingBoxMinVertex, m_Model[0]->BoundingBoxMaxVertex);
 
 	m_Model[1]->CalculateAABB(m_Model[1]->BoundingBoxVertPosArray, m_Model[1]->AABBWorld, m_Model[1]->BoundingBoxMinVertex, m_Model[1]->BoundingBoxMaxVertex);
@@ -374,6 +400,12 @@ bool GraphicsClass::Render(float rotation)
 	m_Model[2]->CalculateAABB(m_Model[2]->BoundingBoxVertPosArray, m_Model[2]->AABBWorld, m_Model[2]->BoundingBoxMinVertex, m_Model[2]->BoundingBoxMaxVertex);
 
 	m_Model[3]->CalculateAABB(m_Model[3]->BoundingBoxVertPosArray, m_Model[3]->AABBWorld, m_Model[3]->BoundingBoxMinVertex, m_Model[3]->BoundingBoxMaxVertex);
+
+	for (int i = 5; i < 21; i++)
+	{
+		m_Model[i]->CalculateAABB(m_Model[i]->BoundingBoxVertPosArray, m_Model[i]->AABBWorld, m_Model[i]->BoundingBoxMinVertex, m_Model[i]->BoundingBoxMaxVertex);
+	}
+
 
 
 	for (int i = 0; i < models; i++)
@@ -434,6 +466,7 @@ bool GraphicsClass::Render(float rotation)
 
 	//result = m_LightShader->Render(m_Direct3D->GetDeviceContext(), m_Model[1]->GetVertexCount(), m_Model[1]->GetInstanceCount(), worldMatrix, viewMatrix,
 	//	projectionMatrix, m_Model[1]->GetTexture(), m_Light->GetDirection(), m_Light->GetAmbientColor(), m_Light->GetDiffuseColor());
+
 	for (int i = 0; i < models; i++)
 	{
 		m_Model[i]->Render(m_Direct3D->GetDeviceContext());

@@ -48,6 +48,7 @@ private:
 	float cameraYrot = 0.0f;
 	float cameraZrot = 0.0f;
 	bool colliding;
+	bool onbutton = false;
 
 
 	D3DClass* m_Direct3D;

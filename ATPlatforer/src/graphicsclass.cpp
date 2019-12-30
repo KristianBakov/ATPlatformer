@@ -154,6 +154,13 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 		m_Model[i]->CreateBoundingVolumes(m_Model[i]->VertPosArray, m_Model[i]->BoundingBoxVertPosArray, m_Model[i]->BoundingSphere, m_Model[i]->CenterOffset);
 	}
 
+	m_Model[6]->AABBWorld = XMMatrixTranslation(0, -5, 40);
+	m_Model[7]->AABBWorld = XMMatrixTranslation(0, -5, 42);
+	m_Model[8]->AABBWorld = XMMatrixTranslation(0, -5, 44);
+	m_Model[9]->AABBWorld = XMMatrixTranslation(0, -5, 46);
+	m_Model[10]->AABBWorld = XMMatrixTranslation(0, -5, 48);
+	m_Model[11]->AABBWorld = XMMatrixTranslation(0, -5, 50);
+	m_Model[12]->AABBWorld = XMMatrixTranslation(0, -5, 52);
 	//// Create the texture shader object.
 	//m_TextureShader = new TextureShaderClass;
 	//if (!m_TextureShader)
@@ -329,6 +336,14 @@ bool GraphicsClass::Frame()
 		if (m_Model[i]->iscollided)
 		{
 			colliding = true;
+			if (m_Model[i]->isbutton)
+			{
+				onbutton = true;
+			}
+			else
+			{
+				onbutton = false;
+			}
 		}
 	}
 	if (!colliding)
@@ -375,15 +390,18 @@ bool GraphicsClass::Render(float rotation)
 	m_Model[3]->AABBWorld = XMMatrixTranslation(0, 0, 15);
 	m_Model[4]->AABBWorld = XMMatrixTranslation(0, 1, 15);
 
-	m_Model[5]->AABBWorld = XMMatrixTranslation(0, 0, 20);
-	m_Model[6]->AABBWorld = XMMatrixTranslation(2, 0, 20);
-	m_Model[7]->AABBWorld = XMMatrixTranslation(-2, 0, 20);
-	m_Model[8]->AABBWorld = XMMatrixTranslation(0, 0, 22);
-	m_Model[9]->AABBWorld = XMMatrixTranslation(2, 0, 22);
-	m_Model[10]->AABBWorld = XMMatrixTranslation(-2, 0, 22);
-	m_Model[11]->AABBWorld = XMMatrixTranslation(0, 0, 24);
-	m_Model[12]->AABBWorld = XMMatrixTranslation(2, 0, 24);
-	m_Model[13]->AABBWorld = XMMatrixTranslation(-2, 0, 24);
+	m_Model[5]->AABBWorld = XMMatrixScaling(4, 1, 4) * XMMatrixTranslation(0, 0, 25);
+	if (onbutton == true)
+	{
+		m_Model[6]->AABBWorld += XMMatrixTranslation(0, 2, 40) / 50;
+		m_Model[7]->AABBWorld += XMMatrixTranslation(0, 2, 42) / 50;
+		m_Model[8]->AABBWorld += XMMatrixTranslation(0, 2, 44) / 50;
+		m_Model[9]->AABBWorld += XMMatrixTranslation(0, 2, 46) / 50;
+		m_Model[10]->AABBWorld += XMMatrixTranslation(0, 2, 48) / 50;
+		m_Model[11]->AABBWorld += XMMatrixTranslation(0, 2, 50) / 50;
+		m_Model[12]->AABBWorld += XMMatrixTranslation(0, 2, 52) / 50;
+	}
+	//m_Model[5]->AABBWorld += XMMatrixTranslation(m_Camera->GetPosition().x, m_Camera->GetPosition().y, m_Camera->GetPosition().z) / 100;
 	m_Player->AABBWorld = XMMatrixTranslation(m_Camera->GetPosition().x, m_Camera->GetPosition().y, m_Camera->GetPosition().z);
 
 	//D3D11_MAPPED_SUBRESOURCE resource;

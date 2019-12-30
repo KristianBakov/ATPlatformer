@@ -134,9 +134,16 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 		MessageBox(hwnd, L"Could not initialize the model object.", L"Error", MB_OK);
 		return false;
 	}
-	for (int i = 5; i < 21; i++)
+
+	result = m_Model[5]->Initialize(m_Direct3D->GetDevice(), m_Direct3D->GetDeviceContext(), (char*)"../src/cube.txt", (char*)"../src/grey.tga");
+	if (!result)
 	{
-		result = m_Model[i]->Initialize(m_Direct3D->GetDevice(), m_Direct3D->GetDeviceContext(), (char*)"../src/cube.txt", (char*)"../src/grey.tga");
+		MessageBox(hwnd, L"Could not initialize the model object.", L"Error", MB_OK);
+		return false;
+	}
+	for (int i = 6; i < 21; i++)
+	{
+		result = m_Model[i]->Initialize(m_Direct3D->GetDevice(), m_Direct3D->GetDeviceContext(), (char*)"../src/cube.txt", (char*)"../src/blue.tga");
 		if (!result)
 		{
 			MessageBox(hwnd, L"Could not initialize the model object.", L"Error", MB_OK);
@@ -154,13 +161,13 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 		m_Model[i]->CreateBoundingVolumes(m_Model[i]->VertPosArray, m_Model[i]->BoundingBoxVertPosArray, m_Model[i]->BoundingSphere, m_Model[i]->CenterOffset);
 	}
 
-	m_Model[6]->AABBWorld = XMMatrixTranslation(0, -5, 40);
-	m_Model[7]->AABBWorld = XMMatrixTranslation(0, -5, 42);
-	m_Model[8]->AABBWorld = XMMatrixTranslation(0, -5, 44);
-	m_Model[9]->AABBWorld = XMMatrixTranslation(0, -5, 46);
-	m_Model[10]->AABBWorld = XMMatrixTranslation(0, -5, 48);
-	m_Model[11]->AABBWorld = XMMatrixTranslation(0, -5, 50);
-	m_Model[12]->AABBWorld = XMMatrixTranslation(0, -5, 52);
+	m_Model[6]->AABBWorld = XMMatrixTranslation(0, -10, 40);
+	m_Model[7]->AABBWorld = XMMatrixTranslation(0, -10, 42);
+	m_Model[8]->AABBWorld = XMMatrixTranslation(0, -10, 44);
+	m_Model[9]->AABBWorld = XMMatrixTranslation(0, -10, 46);
+	m_Model[10]->AABBWorld = XMMatrixTranslation(0, -10, 48);
+	m_Model[11]->AABBWorld = XMMatrixTranslation(0, -10, 50);
+	m_Model[12]->AABBWorld = XMMatrixTranslation(0, -10, 52);
 	//// Create the texture shader object.
 	//m_TextureShader = new TextureShaderClass;
 	//if (!m_TextureShader)
@@ -390,7 +397,9 @@ bool GraphicsClass::Render(float rotation)
 	m_Model[3]->AABBWorld = XMMatrixTranslation(0, 0, 15);
 	m_Model[4]->AABBWorld = XMMatrixTranslation(0, 1, 15);
 
+	//scaled platform
 	m_Model[5]->AABBWorld = XMMatrixScaling(4, 1, 4) * XMMatrixTranslation(0, 0, 25);
+	//physcics bridge
 	if (onbutton == true)
 	{
 		m_Model[6]->AABBWorld += XMMatrixTranslation(0, 2, 40) / 50;
@@ -401,7 +410,16 @@ bool GraphicsClass::Render(float rotation)
 		m_Model[11]->AABBWorld += XMMatrixTranslation(0, 2, 50) / 50;
 		m_Model[12]->AABBWorld += XMMatrixTranslation(0, 2, 52) / 50;
 	}
+	m_Model[13]->AABBWorld = XMMatrixTranslation(0, 3, 55);
 	//m_Model[5]->AABBWorld += XMMatrixTranslation(m_Camera->GetPosition().x, m_Camera->GetPosition().y, m_Camera->GetPosition().z) / 100;
+
+
+	//respawn / checkpoints
+	if (m_Camera->GetPosition().y < -20)
+	{
+		m_Camera->SetPosition(0.0f, 4.0f, 0.0f);
+		m_Camera->SetRotation(0.0f, 0.0f, 0.0f);
+	}
 	m_Player->AABBWorld = XMMatrixTranslation(m_Camera->GetPosition().x, m_Camera->GetPosition().y, m_Camera->GetPosition().z);
 
 	//D3D11_MAPPED_SUBRESOURCE resource;

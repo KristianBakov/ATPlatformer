@@ -38,14 +38,14 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 
 	// Create the Direct3D object.
 	m_Direct3D = new D3DClass;
-	if(!m_Direct3D)
+	if (!m_Direct3D)
 	{
 		return false;
 	}
 
 	// Initialize the Direct3D object.
 	result = m_Direct3D->Initialize(screenWidth, screenHeight, VSYNC_ENABLED, hwnd, FULL_SCREEN, SCREEN_DEPTH, SCREEN_NEAR);
-	if(!result)
+	if (!result)
 	{
 		MessageBox(hwnd, L"Could not initialize Direct3D.", L"Error", MB_OK);
 		return false;
@@ -63,7 +63,7 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 	m_Camera->SetRotation(0.0f, 0.0f, 0.0f);
 
 
-		// Create the model object.
+	// Create the model object.
 	for (int i = 0; i < models; i++)
 	{
 		m_Model[i] = new ModelClass;
@@ -79,8 +79,8 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 		return false;
 	}
 
-		// Initialize the model object
-		//result = m_Model[i]->Initialize(m_Direct3D->GetDevice(), m_Direct3D->GetDeviceContext(), (char*)"../src/stone01.tga");
+	// Initialize the model object
+	//result = m_Model[i]->Initialize(m_Direct3D->GetDevice(), m_Direct3D->GetDeviceContext(), (char*)"../src/stone01.tga");
 
 	result = m_Player->Initialize(m_Direct3D->GetDevice(), m_Direct3D->GetDeviceContext(), (char*)"../src/cube.txt", (char*)"../src/grey.tga");
 	if (!result)
@@ -121,7 +121,7 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 		return false;
 	}
 
-	result = m_Model[3]->Initialize(m_Direct3D->GetDevice(), m_Direct3D->GetDeviceContext(), (char*)"../src/cube.txt", (char*)"../src/red.tga");
+	result = m_Model[3]->Initialize(m_Direct3D->GetDevice(), m_Direct3D->GetDeviceContext(), (char*)"../src/cube.txt", (char*)"../src/blue.tga");
 	if (!result)
 	{
 		MessageBox(hwnd, L"Could not initialize the model object.", L"Error", MB_OK);
@@ -141,7 +141,26 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 		MessageBox(hwnd, L"Could not initialize the model object.", L"Error", MB_OK);
 		return false;
 	}
-	for (int i = 6; i < 21; i++)
+	for (int i = 6; i < 14; i++)
+	{
+		result = m_Model[i]->Initialize(m_Direct3D->GetDevice(), m_Direct3D->GetDeviceContext(), (char*)"../src/cube.txt", (char*)"../src/blue.tga");
+		if (!result)
+		{
+			MessageBox(hwnd, L"Could not initialize the model object.", L"Error", MB_OK);
+			return false;
+		}
+	}
+	for (int i = 14; i < 19; i++)
+	{
+		result = m_Model[i]->Initialize(m_Direct3D->GetDevice(), m_Direct3D->GetDeviceContext(), (char*)"../src/cube.txt", (char*)"../src/grey.tga");
+		if (!result)
+		{
+			MessageBox(hwnd, L"Could not initialize the model object.", L"Error", MB_OK);
+			return false;
+		}
+	}
+
+	for (int i = 19; i < models; i++)
 	{
 		result = m_Model[i]->Initialize(m_Direct3D->GetDevice(), m_Direct3D->GetDeviceContext(), (char*)"../src/cube.txt", (char*)"../src/blue.tga");
 		if (!result)
@@ -156,7 +175,7 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 	m_Model[2]->CreateBoundingVolumes(m_Model[2]->VertPosArray, m_Model[2]->BoundingBoxVertPosArray, m_Model[2]->BoundingSphere, m_Model[2]->CenterOffset);
 	m_Model[3]->CreateBoundingVolumes(m_Model[3]->VertPosArray, m_Model[3]->BoundingBoxVertPosArray, m_Model[3]->BoundingSphere, m_Model[3]->CenterOffset);
 	m_Model[3]->isbutton = true;
-	for (int i = 5; i < 21; i++)
+	for (int i = 5; i < models; i++)
 	{
 		m_Model[i]->CreateBoundingVolumes(m_Model[i]->VertPosArray, m_Model[i]->BoundingBoxVertPosArray, m_Model[i]->BoundingSphere, m_Model[i]->CenterOffset);
 	}
@@ -168,6 +187,16 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 	m_Model[10]->AABBWorld = XMMatrixTranslation(0, -10, 48);
 	m_Model[11]->AABBWorld = XMMatrixTranslation(0, -10, 50);
 	m_Model[12]->AABBWorld = XMMatrixTranslation(0, -10, 52);
+
+	for (int i = 0; i < 10; i++)
+	{
+		for (int k = 0; k < 10; k++)
+		{
+			int instance = (i * 10 + k) + 19;
+			m_Model[instance]->AABBWorld = XMMatrixTranslation(-(i * 2), 9, (k * 2));
+		}
+	}
+
 	//// Create the texture shader object.
 	//m_TextureShader = new TextureShaderClass;
 	//if (!m_TextureShader)
@@ -392,10 +421,11 @@ bool GraphicsClass::Render(float rotation)
 	m_Camera->GetViewMatrix(viewMatrix);
 	m_Direct3D->GetProjectionMatrix(projectionMatrix);
 
+	m_Model[0]->AABBWorld = XMMatrixScaling(4, 1, 4) * XMMatrixTranslation(0, 0, -5);
 	m_Model[1]->AABBWorld = XMMatrixTranslation(0, 0, 3);
 	m_Model[2]->AABBWorld = XMMatrixTranslation(0, 0, 6);
-	m_Model[3]->AABBWorld = XMMatrixTranslation(0, 0, 15);
-	m_Model[4]->AABBWorld = XMMatrixTranslation(0, 1, 15);
+	m_Model[3]->AABBWorld = XMMatrixTranslation(0, 0.5, 25);
+	m_Model[4]->AABBWorld = XMMatrixTranslation(0, 1.5, 25);
 
 	//scaled platform
 	m_Model[5]->AABBWorld = XMMatrixScaling(4, 1, 4) * XMMatrixTranslation(0, 0, 25);
@@ -412,6 +442,40 @@ bool GraphicsClass::Render(float rotation)
 	}
 	m_Model[13]->AABBWorld = XMMatrixTranslation(0, 3, 55);
 	//m_Model[5]->AABBWorld += XMMatrixTranslation(m_Camera->GetPosition().x, m_Camera->GetPosition().y, m_Camera->GetPosition().z) / 100;
+	m_Model[14]->AABBWorld = XMMatrixTranslation(4, 5, 58);
+	m_Model[15]->AABBWorld = XMMatrixTranslation(-6, 7, 58);
+	m_Model[16]->AABBWorld = XMMatrixTranslation(-12, 9, 62);
+	m_Model[17]->AABBWorld = XMMatrixTranslation(-20, 9, 62);
+	m_Model[18]->AABBWorld = XMMatrixTranslation(-30, 9, 62);
+
+
+
+	//maze
+	//m_Model[19]->AABBWorld = XMMatrixTranslation(-43, 9, 62);
+	//m_Model[20]->AABBWorld = XMMatrixTranslation(-43, 9, 64);
+	//m_Model[21]->AABBWorld = XMMatrixTranslation(-43, 9, 66);
+	//m_Model[22]->AABBWorld = XMMatrixTranslation(-43, 9, 68);
+	//m_Model[23]->AABBWorld = XMMatrixTranslation(-43, 9, 70);
+	//m_Model[24]->AABBWorld = XMMatrixTranslation(-43, 9, 72);
+	//m_Model[25]->AABBWorld = XMMatrixTranslation(-43, 9, 74);
+	//m_Model[26]->AABBWorld = XMMatrixTranslation(-43, 9, 76);
+	//m_Model[27]->AABBWorld = XMMatrixTranslation(-43, 9, 78);
+	//m_Model[28]->AABBWorld = XMMatrixTranslation(-43, 9, 80);
+
+	//m_Model[29]->AABBWorld = XMMatrixTranslation(-45, 9, 62);
+	//m_Model[30]->AABBWorld = XMMatrixTranslation(-47, 9, 62);
+	//m_Model[31]->AABBWorld = XMMatrixTranslation(-48, 9, 62);
+	//m_Model[32]->AABBWorld = XMMatrixTranslation(-50, 9, 62);
+	//m_Model[33]->AABBWorld = XMMatrixTranslation(-52, 9, 62);
+	//m_Model[34]->AABBWorld = XMMatrixTranslation(-54, 9, 62);
+	//m_Model[35]->AABBWorld = XMMatrixTranslation(-56, 9, 62);
+	//m_Model[36]->AABBWorld = XMMatrixTranslation(-58, 9, 62);
+	//m_Model[37]->AABBWorld = XMMatrixTranslation(-60, 9, 62);
+	//m_Model[38]->AABBWorld = XMMatrixTranslation(-62, 9, 62);
+
+
+
+
 
 
 	//respawn / checkpoints
@@ -437,7 +501,7 @@ bool GraphicsClass::Render(float rotation)
 
 	m_Model[3]->CalculateAABB(m_Model[3]->BoundingBoxVertPosArray, m_Model[3]->AABBWorld, m_Model[3]->BoundingBoxMinVertex, m_Model[3]->BoundingBoxMaxVertex);
 
-	for (int i = 5; i < 21; i++)
+	for (int i = 5; i < models; i++)
 	{
 		m_Model[i]->CalculateAABB(m_Model[i]->BoundingBoxVertPosArray, m_Model[i]->AABBWorld, m_Model[i]->BoundingBoxMinVertex, m_Model[i]->BoundingBoxMaxVertex);
 	}

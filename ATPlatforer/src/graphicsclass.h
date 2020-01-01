@@ -38,7 +38,7 @@ public:
 	bool Initialize(int, int, HWND);
 	void Shutdown();
 	bool Frame();
-	const static int models = 21;
+	const static int models = 130;
 
 private:
 	bool Render(float);

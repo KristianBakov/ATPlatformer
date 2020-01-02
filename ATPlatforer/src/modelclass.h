@@ -97,6 +97,7 @@ public:
 
 	bool iscollided = false;
 	bool isbutton = false;
+	bool isfalling = false;
 
 	D3D11_SUBRESOURCE_DATA vertexData, instanceData;
 

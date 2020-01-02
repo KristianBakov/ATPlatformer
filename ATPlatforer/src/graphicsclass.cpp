@@ -160,7 +160,7 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 		}
 	}
 
-	for (int i = 19; i < models; i++)
+	for (int i = 19; i < 43; i++)
 	{
 		result = m_Model[i]->Initialize(m_Direct3D->GetDevice(), m_Direct3D->GetDeviceContext(), (char*)"../src/cube.txt", (char*)"../src/blue.tga");
 		if (!result)
@@ -168,7 +168,28 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 			MessageBox(hwnd, L"Could not initialize the model object.", L"Error", MB_OK);
 			return false;
 		}
+		m_Model[i]->isfalling = true;
 	}
+
+	for (int i = 43; i < models; i++)
+	{
+		result = m_Model[i]->Initialize(m_Direct3D->GetDevice(), m_Direct3D->GetDeviceContext(), (char*)"../src/cube.txt", (char*)"../src/red.tga");
+		if (!result)
+		{
+			MessageBox(hwnd, L"Could not initialize the model object.", L"Error", MB_OK);
+			return false;
+		}
+	}
+
+	//for (int i = 60; i < models; i++)
+	//{
+	//	result = m_Model[i]->Initialize(m_Direct3D->GetDevice(), m_Direct3D->GetDeviceContext(), (char*)"../src/cube.txt", (char*)"../src/red.tga");
+	//	if (!result)
+	//	{
+	//		MessageBox(hwnd, L"Could not initialize the model object.", L"Error", MB_OK);
+	//		return false;
+	//	}
+	//}
 
 	m_Model[0]->CreateBoundingVolumes(m_Model[0]->VertPosArray, m_Model[0]->BoundingBoxVertPosArray, m_Model[0]->BoundingSphere, m_Model[0]->CenterOffset);
 	m_Model[1]->CreateBoundingVolumes(m_Model[1]->VertPosArray, m_Model[1]->BoundingBoxVertPosArray, m_Model[1]->BoundingSphere, m_Model[1]->CenterOffset);
@@ -187,15 +208,6 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 	m_Model[10]->AABBWorld = XMMatrixTranslation(0, -10, 48);
 	m_Model[11]->AABBWorld = XMMatrixTranslation(0, -10, 50);
 	m_Model[12]->AABBWorld = XMMatrixTranslation(0, -10, 52);
-
-	for (int i = 0; i < 10; i++)
-	{
-		for (int k = 0; k < 10; k++)
-		{
-			int instance = (i * 10 + k) + 19;
-			m_Model[instance]->AABBWorld = XMMatrixTranslation(-(i * 2), 9, (k * 2));
-		}
-	}
 
 	//// Create the texture shader object.
 	//m_TextureShader = new TextureShaderClass;
@@ -380,6 +392,15 @@ bool GraphicsClass::Frame()
 			{
 				onbutton = false;
 			}
+
+			if (m_Model[i]->isfalling)
+			{
+				falling = true;
+			}
+			else
+			{
+				falling = false;
+			}
 		}
 	}
 	if (!colliding)
@@ -448,32 +469,24 @@ bool GraphicsClass::Render(float rotation)
 	m_Model[17]->AABBWorld = XMMatrixTranslation(-20, 9, 62);
 	m_Model[18]->AABBWorld = XMMatrixTranslation(-30, 9, 62);
 
+	for (int i = 0; i < 5; i++)
+	{
+		for (int k = 0; k < 4; k++)
+		{
+			int instance = (i * 5 + k) + 19;
 
+			if (m_Model[instance]->isfalling && falling)
+			{
+				m_Model[instance]->AABBWorld += XMMatrixTranslation(-(i * 2) - 43, -20, (k * 2) + 52) / 100;
+			}
+			else
+			{
+				m_Model[instance]->AABBWorld = XMMatrixTranslation(-(i * 2) - 43, 9, (k * 2) + 52);
+			}
+		}
+	}
 
-	//maze
-	//m_Model[19]->AABBWorld = XMMatrixTranslation(-43, 9, 62);
-	//m_Model[20]->AABBWorld = XMMatrixTranslation(-43, 9, 64);
-	//m_Model[21]->AABBWorld = XMMatrixTranslation(-43, 9, 66);
-	//m_Model[22]->AABBWorld = XMMatrixTranslation(-43, 9, 68);
-	//m_Model[23]->AABBWorld = XMMatrixTranslation(-43, 9, 70);
-	//m_Model[24]->AABBWorld = XMMatrixTranslation(-43, 9, 72);
-	//m_Model[25]->AABBWorld = XMMatrixTranslation(-43, 9, 74);
-	//m_Model[26]->AABBWorld = XMMatrixTranslation(-43, 9, 76);
-	//m_Model[27]->AABBWorld = XMMatrixTranslation(-43, 9, 78);
-	//m_Model[28]->AABBWorld = XMMatrixTranslation(-43, 9, 80);
-
-	//m_Model[29]->AABBWorld = XMMatrixTranslation(-45, 9, 62);
-	//m_Model[30]->AABBWorld = XMMatrixTranslation(-47, 9, 62);
-	//m_Model[31]->AABBWorld = XMMatrixTranslation(-48, 9, 62);
-	//m_Model[32]->AABBWorld = XMMatrixTranslation(-50, 9, 62);
-	//m_Model[33]->AABBWorld = XMMatrixTranslation(-52, 9, 62);
-	//m_Model[34]->AABBWorld = XMMatrixTranslation(-54, 9, 62);
-	//m_Model[35]->AABBWorld = XMMatrixTranslation(-56, 9, 62);
-	//m_Model[36]->AABBWorld = XMMatrixTranslation(-58, 9, 62);
-	//m_Model[37]->AABBWorld = XMMatrixTranslation(-60, 9, 62);
-	//m_Model[38]->AABBWorld = XMMatrixTranslation(-62, 9, 62);
-
-
+	m_Model[44]->AABBWorld = XMMatrixTranslation(-75, 9, 62);
 
 
 

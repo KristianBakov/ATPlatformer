@@ -38,7 +38,7 @@ public:
 	bool Initialize(int, int, HWND);
 	void Shutdown();
 	bool Frame();
-	const static int models = 130;
+	const static int models = 45;
 
 private:
 	bool Render(float);
@@ -49,6 +49,7 @@ private:
 	float cameraZrot = 0.0f;
 	bool colliding;
 	bool onbutton = false;
+	bool falling = false;
 
 
 	D3DClass* m_Direct3D;

@@ -160,6 +160,7 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 		}
 	}
 
+	//falling platform
 	for (int i = 19; i < 43; i++)
 	{
 		result = m_Model[i]->Initialize(m_Direct3D->GetDevice(), m_Direct3D->GetDeviceContext(), (char*)"../src/cube.txt", (char*)"../src/blue.tga");
@@ -171,7 +172,14 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 		m_Model[i]->isfalling = true;
 	}
 
-	for (int i = 43; i < models; i++)
+	result = m_Model[43]->Initialize(m_Direct3D->GetDevice(), m_Direct3D->GetDeviceContext(), (char*)"../src/cube.txt", (char*)"../src/end.tga");
+if (!result)
+{
+	MessageBox(hwnd, L"Could not initialize the model object.", L"Error", MB_OK);
+	return false;
+}
+
+	for (int i = 44; i < models; i++)
 	{
 		result = m_Model[i]->Initialize(m_Direct3D->GetDevice(), m_Direct3D->GetDeviceContext(), (char*)"../src/cube.txt", (char*)"../src/red.tga");
 		if (!result)
@@ -469,6 +477,7 @@ bool GraphicsClass::Render(float rotation)
 	m_Model[17]->AABBWorld = XMMatrixTranslation(-20, 9, 62);
 	m_Model[18]->AABBWorld = XMMatrixTranslation(-30, 9, 62);
 
+	//make the platform fall
 	for (int i = 0; i < 5; i++)
 	{
 		for (int k = 0; k < 4; k++)
@@ -486,7 +495,10 @@ bool GraphicsClass::Render(float rotation)
 		}
 	}
 
-	m_Model[44]->AABBWorld = XMMatrixTranslation(-75, 9, 62);
+	m_Model[43]->AABBWorld = XMMatrixTranslation(-100, -10, 62);
+	m_Model[44]->AABBWorld = XMMatrixTranslation(-75, -10, 62);
+	m_Model[45]->AABBWorld = XMMatrixTranslation(-80, -10, 62);
+	m_Model[46]->AABBWorld = XMMatrixTranslation(-90, -10, 62);
 
 
 
